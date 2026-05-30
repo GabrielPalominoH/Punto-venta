@@ -1,10 +1,41 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { db } from "../utils/db";
 
 export default function Usuarios() {
   const [search, setSearch] = useState("");
-  const users = db.getUsers();
+  const [users, setUsers] = useState(() => db.getUsers());
+  const [menuOpen, setMenuOpen] = useState(null);
+  const [roleTarget, setRoleTarget] = useState(null);
+  const menuRef = useRef(null);
   const timeline = db.getActivities();
+
+  const roles = ["Admin", "Operador", "Inventario"];
+
+  useEffect(() => {
+    db.saveUsers(users);
+  }, [users]);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(null);
+        setRoleTarget(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const toggleEnabled = (username) => {
+    setUsers((prev) => prev.map((u) => u.username === username ? { ...u, enabled: !u.enabled } : u));
+    setMenuOpen(null);
+  };
+
+  const changeRole = (username, role) => {
+    setUsers((prev) => prev.map((u) => u.username === username ? { ...u, role } : u));
+    setRoleTarget(null);
+    setMenuOpen(null);
+  };
 
   const filtered = users.filter(
     (u) =>
@@ -43,8 +74,16 @@ export default function Usuarios() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <section className="col-span-1 lg:col-span-8 space-y-6">
+          {users.filter((u) => !u.enabled).length > 0 && (
+            <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 flex items-center gap-2">
+              <span className="material-symbols-outlined text-rose-stock text-lg">info</span>
+              <p className="text-sm text-rose-stock font-semibold">
+                {users.filter((u) => !u.enabled).length} usuario(s) deshabilitado(s)
+              </p>
+            </div>
+          )}
           <div className="bg-white rounded-xl border border-outline-variant overflow-hidden shadow-sm">
             <div className="px-4 py-4 border-b border-outline-variant bg-surface-bright flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div className="relative w-full sm:w-auto sm:min-w-[240px]">
@@ -72,13 +111,14 @@ export default function Usuarios() {
                     <th className="px-4 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Nombre</th>
                     <th className="px-4 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Username</th>
                     <th className="px-4 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Rol</th>
+                    <th className="px-4 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Estado</th>
                     <th className="px-4 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Último Acceso</th>
                     <th className="px-4 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">Acciones</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant">
                   {filtered.map((u) => (
-                    <tr key={u.username} className="hover:bg-surface-container-low/50 transition-colors group">
+                    <tr key={u.username} className={`transition-colors group ${u.enabled === false ? "opacity-60" : "hover:bg-surface-container-low/50"}`}>
                       <td className="px-4 py-4">
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-full ${avatarStyle(u.initials)} flex items-center justify-center font-bold shrink-0`}>
@@ -96,11 +136,54 @@ export default function Usuarios() {
                           {u.role}
                         </span>
                       </td>
+                      <td className="px-4 py-4">
+                        <span className={`text-xs font-bold flex items-center gap-1 ${u.enabled === false ? "text-rose-stock" : "text-green-600"}`}>
+                          <span className={`w-2 h-2 rounded-full ${u.enabled === false ? "bg-rose-stock" : "bg-green-500"}`}></span>
+                          {u.enabled === false ? "Deshabilitado" : "Activo"}
+                        </span>
+                      </td>
                       <td className="px-4 py-4 text-sm text-on-surface-variant whitespace-nowrap">{u.lastAccess}</td>
-                      <td className="px-4 py-4 text-right">
-                        <button className="p-2 opacity-0 group-hover:opacity-100 hover:bg-surface-container transition-all rounded-lg">
+                      <td className="px-4 py-4 text-right relative">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setMenuOpen(menuOpen === u.username ? null : u.username); setRoleTarget(null); }}
+                          className="p-2 opacity-0 group-hover:opacity-100 hover:bg-surface-container transition-all rounded-lg"
+                        >
                           <span className="material-symbols-outlined text-on-surface-variant">more_vert</span>
                         </button>
+                        {menuOpen === u.username && (
+                          <div ref={menuRef} className="absolute right-0 top-full mt-1 bg-white border border-outline-variant rounded-lg shadow-xl z-20 min-w-[180px] py-1" onClick={(e) => e.stopPropagation()}>
+                            <button
+                              onClick={() => toggleEnabled(u.username)}
+                              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-slate-50 transition-colors text-left"
+                            >
+                              <span className="material-symbols-outlined text-base">{u.enabled === false ? "check_circle" : "cancel"}</span>
+                              {u.enabled === false ? "Habilitar" : "Deshabilitar"}
+                            </button>
+                            <div className="relative">
+                              <button
+                                onClick={() => setRoleTarget(roleTarget === u.username ? null : u.username)}
+                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-slate-50 transition-colors text-left"
+                              >
+                                <span className="material-symbols-outlined text-base">admin_panel_settings</span>
+                                Cambiar Rol
+                              </button>
+                              {roleTarget === u.username && (
+                                <div className="ml-6 border-t border-outline-variant pt-1 pb-1">
+                                  {roles.filter((r) => r !== u.role).map((r) => (
+                                    <button
+                                      key={r}
+                                      onClick={() => changeRole(u.username, r)}
+                                      className="w-full flex items-center gap-2 px-4 py-1.5 text-sm text-on-surface hover:bg-slate-50 transition-colors text-left"
+                                    >
+                                      <span className={`w-2 h-2 rounded-full ${r === "Admin" ? "bg-secondary" : r === "Operador" ? "bg-[#0b1c30]" : "bg-gray-500"}`}></span>
+                                      {r}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -116,27 +199,6 @@ export default function Usuarios() {
                 <button className="p-1 border border-outline-variant rounded hover:bg-surface-container transition-colors">
                   <span className="material-symbols-outlined">chevron_right</span>
                 </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white border border-outline-variant p-4 rounded-xl shadow-sm flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-[10px] sm:text-xs font-bold text-on-surface-variant uppercase">Sesiones Activas</p>
-                <h4 className="text-2xl sm:text-3xl font-extrabold text-secondary">08</h4>
-              </div>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-secondary/10 rounded-full flex items-center justify-center text-secondary shrink-0">
-                <span className="material-symbols-outlined">wifi_tethering</span>
-              </div>
-            </div>
-            <div className="bg-white border border-outline-variant p-4 rounded-xl shadow-sm flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-[10px] sm:text-xs font-bold text-on-surface-variant uppercase">Último Intento Fallido</p>
-                <h4 className="text-2xl sm:text-3xl font-extrabold text-error">N/A</h4>
-              </div>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-error/10 rounded-full flex items-center justify-center text-error shrink-0">
-                <span className="material-symbols-outlined">lock_open</span>
               </div>
             </div>
           </div>

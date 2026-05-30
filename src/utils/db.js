@@ -42,11 +42,11 @@ const initialOrders = [
 ];
 
 const initialUsers = [
-  { name: "Carlos Méndez", email: "carlos.m@marlin.com", username: "cmendez_admin", role: "Admin", lastAccess: "Hoy, 09:15 AM", initials: "CM", roleColor: "secondary" },
-  { name: "Ana López", email: "ana.lopez@marlin.com", username: "alopez_pos", role: "Operador", lastAccess: "Ayer, 18:42 PM", initials: "AL", roleColor: "tertiary" },
-  { name: "Jorge Ruiz", email: "jruiz_inv@marlin.com", username: "jruiz_stock", role: "Inventario", lastAccess: "05 Oct, 11:30 AM", initials: "JR", roleColor: "neutral" },
-  { name: "Elena Vargas", email: "evargas@marlin.com", username: "elena_v", role: "Admin", lastAccess: "Hace 2 horas", initials: "EV", roleColor: "secondary" },
-  { name: "Marco Sosa", email: "m_sosa@marlin.com", username: "m_sosa", role: "Operador", lastAccess: "Hace 30 min", initials: "MS", roleColor: "tertiary" },
+  { name: "Carlos Méndez", email: "carlos.m@marlin.com", username: "cmendez_admin", role: "Admin", lastAccess: "Hoy, 09:15 AM", initials: "CM", roleColor: "secondary", enabled: true },
+  { name: "Ana López", email: "ana.lopez@marlin.com", username: "alopez_pos", role: "Operador", lastAccess: "Ayer, 18:42 PM", initials: "AL", roleColor: "tertiary", enabled: true },
+  { name: "Jorge Ruiz", email: "jruiz_inv@marlin.com", username: "jruiz_stock", role: "Inventario", lastAccess: "05 Oct, 11:30 AM", initials: "JR", roleColor: "neutral", enabled: true },
+  { name: "Elena Vargas", email: "evargas@marlin.com", username: "elena_v", role: "Admin", lastAccess: "Hace 2 horas", initials: "EV", roleColor: "secondary", enabled: true },
+  { name: "Marco Sosa", email: "m_sosa@marlin.com", username: "m_sosa", role: "Operador", lastAccess: "Hace 30 min", initials: "MS", roleColor: "tertiary", enabled: true },
 ];
 
 const initialActivities = [

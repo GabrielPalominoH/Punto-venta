@@ -30,6 +30,7 @@ export default function Layout() {
   const [showNotif, setShowNotif] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifSeen, setNotifSeen] = useState(false);
   const notifRef = useRef(null);
   const sidebarRef = useRef(null);
 
@@ -139,9 +140,9 @@ export default function Layout() {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 relative" ref={notifRef}>
-            <button onClick={() => setShowNotif((p) => !p)} className="hover:bg-surface-container-low p-2 rounded-full transition-colors relative">
+            <button onClick={() => { setShowNotif((p) => !p); if (!showNotif) setNotifSeen(true); }} className="hover:bg-surface-container-low p-2 rounded-full transition-colors relative">
               <span className="material-symbols-outlined text-on-surface-variant">notifications</span>
-              {urgentCount > 0 && (
+              {urgentCount > 0 && !notifSeen && (
                 <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-error text-on-error text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-surface px-1">
                   {urgentCount}
                 </span>
@@ -151,9 +152,9 @@ export default function Layout() {
               <div className="absolute top-14 right-0 sm:right-4 w-[320px] sm:w-[380px] bg-white rounded-xl shadow-xl border border-outline-variant overflow-hidden z-50">
                 <div className="px-4 sm:px-5 py-4 border-b border-outline-variant flex items-center justify-between">
                   <h3 className="text-sm font-bold text-on-surface">Notificaciones</h3>
-                  <span className="text-xs text-on-surface-variant">{notifications.length} sin leer</span>
+                  <span className="text-xs text-on-surface-variant">{notifSeen ? "0 sin leer" : `${notifications.length} sin leer`}</span>
                 </div>
-                <div className="max-h-[360px] overflow-y-auto">
+                <div className="max-h-[360px] overflow-y-auto overscroll-contain">
                   {notifications.map((n) => (
                     <div key={n.id} className={`flex items-start gap-3 px-4 sm:px-5 py-3.5 border-b border-outline-variant last:border-b-0 hover:bg-surface-container-low transition-colors ${n.urgent ? "bg-error/5" : ""}`}>
                       <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${n.urgent ? "bg-error/10 text-error" : "bg-secondary/10 text-secondary"}`}>
