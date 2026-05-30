@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "surface-bright": "#fcf8fa",
+                        "inverse-primary": "#bec6e0",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-secondary-fixed": "#001f26",
+                        "on-tertiary-container": "#75859d",
+                        "primary": "#000000",
+                        "inverse-on-surface": "#f3f0f2",
+                        "surface-tint": "#565e74",
+                        "tertiary-fixed": "#d3e4fe",
+                        "primary-container": "#131b2e",
+                        "tertiary-container": "#0b1c30",
+                        "surface-container": "#f0edef",
+                        "surface-container-high": "#eae7e9",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface": "#fcf8fa",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c6c6cd",
+                        "surface-container-low": "#f6f3f5",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "secondary-fixed": "#acedff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "surface-variant": "#e4e2e4",
+                        "on-secondary-container": "#006172",
+                        "on-surface": "#1b1b1d",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-container": "#7c839b",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#dae2fd",
+                        "tertiary": "#000000",
+                        "on-background": "#1b1b1d",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#76777d",
+                        "background": "#fcf8fa",
+                        "inverse-surface": "#303032",
+                        "on-primary-fixed": "#131b2e",
+                        "error-container": "#ffdad6",
+                        "secondary": "#00687a",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#57dffe",
+                        "on-surface-variant": "#45464d",
+                        "surface-dim": "#dcd9db",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "surface-container-highest": "#e4e2e4",
+                        "teal-brand": "#008080",
+                        "amber-stock": "#d97706",
+                        "rose-stock": "#e11d48"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "lg": "32px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "container-max": "1440px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .active-nav-border { border-right: 4px solid #00687a; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-md px-sm overflow-y-auto z-50">
+<div class="mb-xl px-sm flex items-center gap-sm">
+<div class="w-10 h-10 bg-primary-container rounded flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sailing</span>
+</div>
+<div>
+<h1 class="text-primary font-title-sm text-title-sm font-bold tracking-tight">Marlin Poseidon</h1>
+<p class="text-on-surface-variant font-label-caps text-[10px] uppercase tracking-widest">Admin Dashboard</p>
+</div>
+</div>
+<nav class="flex-1 space-y-xs">
+<a class="flex items-center gap-sm px-md py-sm rounded transition-all duration-200 text-on-surface-variant font-body-md hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded transition-all duration-200 text-on-surface-variant font-body-md hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Verificación de Pagos</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded transition-all duration-200 text-secondary font-bold bg-secondary-container/10 active-nav-border" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span>Gestión de Inventario</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded transition-all duration-200 text-on-surface-variant font-body-md hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span>Punto de Venta</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded transition-all duration-200 text-on-surface-variant font-body-md hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Gestión de Usuarios</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-md">
+<div class="flex items-center gap-sm px-md py-sm">
+<img alt="Carlos - Admin" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a middle-aged man with a friendly expression, wearing a navy blue polo shirt. The background is a softly blurred office interior with high-key lighting, maintaining a bright and professional corporate aesthetic. The overall mood is trustworthy and executive, matching a high-end enterprise software user profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcQwSsLhGhTboNIt8lj43gVBTpL739CLPZt_46ttSOew6LVOzRIGtcc2QLgbAybSKozkZ8VDVYSzsfazcMwr2vpD0ynzfnvdo4thI2X6iRgB5PVYAI0sLq2Wzj7NM2BHi_GmJnNxQFnwIhwW9k8ADYYdTREnQnOzxAAd5ezglcNDLu18FD6aDQf5SQ3UY1EgLO_cD2WzITNc8FMQKbp8JYYMcowPBovWKh9C0tGi7uDLnKh97F2sAo15IB30PbTO4WW5MNOnydYaM"/>
+<div>
+<p class="font-title-sm text-[14px] font-bold">Carlos M.</p>
+<p class="text-on-surface-variant font-body-sm text-[12px]">Store Manager</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Navigation -->
+<header class="sticky top-0 z-40 ml-[260px] w-[calc(100%-260px)] h-[64px] bg-surface border-b border-outline-variant shadow-sm flex items-center justify-between px-lg">
+<div class="flex items-center gap-md flex-1">
+<div class="relative w-full max-w-[480px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2 pl-10 pr-4 text-body-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" placeholder="Buscar productos por nombre, SKU o categoría..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="hover:bg-surface-container-low p-2 rounded-full transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-surface-container-low p-2 rounded-full transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[260px] p-md space-y-md">
+<!-- Header Section -->
+<div class="flex items-center justify-between mb-sm">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary">Gestión de Inventario</h2>
+<p class="text-on-surface-variant font-body-md">Supervise existencias, actualice atributos y gestione su catálogo de pesca.</p>
+</div>
+<button class="bg-secondary text-on-secondary px-lg py-md rounded-lg font-title-sm text-[14px] font-bold flex items-center gap-2 hover:opacity-90 transition-all active:scale-95">
+<span class="material-symbols-outlined">add</span>
+                Agregar Nuevo Producto
+            </button>
+</div>
+<!-- Low Stock Alerts -->
+<section class="grid grid-cols-3 gap-md">
+<div class="bg-rose-50 border border-rose-200 p-md rounded-xl flex items-center gap-md">
+<div class="bg-rose-100 text-rose-stock w-12 h-12 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<h4 class="font-label-caps text-rose-stock uppercase tracking-wider">Agotado</h4>
+<p class="font-title-sm text-primary">Carrete Penn Battle III</p>
+<p class="text-body-sm text-on-surface-variant">Requiere pedido inmediato</p>
+</div>
+</div>
+<div class="bg-amber-50 border border-amber-200 p-md rounded-xl flex items-center gap-md">
+<div class="bg-amber-100 text-amber-stock w-12 h-12 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">running_with_errors</span>
+</div>
+<div>
+<h4 class="font-label-caps text-amber-stock uppercase tracking-wider">Stock Bajo</h4>
+<p class="font-title-sm text-primary">Anzuelos Mustang 4/0</p>
+<p class="text-body-sm text-on-surface-variant">5 unidades restantes</p>
+</div>
+</div>
+<div class="bg-amber-50 border border-amber-200 p-md rounded-xl flex items-center gap-md">
+<div class="bg-amber-100 text-amber-stock w-12 h-12 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">priority_high</span>
+</div>
+<div>
+<h4 class="font-label-caps text-amber-stock uppercase tracking-wider">Stock Bajo</h4>
+<p class="font-title-sm text-primary">Señuelo Rapala X-Rap</p>
+<p class="text-body-sm text-on-surface-variant">12 unidades restantes</p>
+</div>
+</div>
+</section>
+<!-- Two Column Layout -->
+<div class="grid grid-cols-12 gap-md items-start">
+<!-- Left: Product Table -->
+<div class="col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="text-left py-md px-md font-label-caps text-outline uppercase tracking-wider">Producto</th>
+<th class="text-left py-md px-md font-label-caps text-outline uppercase tracking-wider">Marca</th>
+<th class="text-left py-md px-md font-label-caps text-outline uppercase tracking-wider">Categoría</th>
+<th class="text-left py-md px-md font-label-caps text-outline uppercase tracking-wider">Precio</th>
+<th class="text-left py-md px-md font-label-caps text-outline uppercase tracking-wider">Stock</th>
+<th class="text-center py-md px-md font-label-caps text-outline uppercase tracking-wider">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-slate-50 transition-colors group cursor-pointer bg-white">
+<td class="py-md px-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-slate-100 rounded border border-outline-variant overflow-hidden">
+<img alt="Carrete Penn" class="w-full h-full object-cover" data-alt="Close-up of a high-end silver and gold fishing reel, showcasing intricate mechanical details and a polished metal finish. The lighting is studio-quality with soft reflections, emphasizing the premium quality and craftsmanship. Set against a clean, light grey background to maintain the modern enterprise UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBKfggzQcf18TPuyxfdkr9sje6aDPlUjGcA7klM1gMSdSW9mXQ7oa-Dx1oNIk3jHRjdPTFJl4u_rJOUuwgPXHftkbpkDOJZ-3eAOPMGtAu8Ug-gbYHki0_EeFbF12-IBljQJca_TCh9-fqUnAOH2RY1g4iqPmYzCcOTBD6qmgQsZhCuV1YUsEpZR3jnybvcy5vhKorMl-jQTQV_UzZwwTgjo-BL8eIo--8KLpRB2J6UoEHPortKsHMUtYqXZGCJLtCWdd5Ptxv_aM"/>
+</div>
+<span class="font-title-sm text-[14px] text-primary">Penn Battle III 6000</span>
+</div>
+</td>
+<td class="py-md px-md text-body-sm text-on-surface-variant">Penn</td>
+<td class="py-md px-md text-body-sm text-on-surface-variant">Carretes</td>
+<td class="py-md px-md font-bold text-primary">$189.99</td>
+<td class="py-md px-md">
+<span class="bg-rose-100 text-rose-stock text-[12px] font-bold px-sm py-1 rounded-full">0</span>
+</td>
+<td class="py-md px-md text-center">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary">visibility</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors group cursor-pointer bg-slate-50/50">
+<td class="py-md px-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-slate-100 rounded border border-outline-variant overflow-hidden">
+<img alt="Shimano Rod" class="w-full h-full object-cover" data-alt="A professional carbon fiber fishing rod detail, featuring a sleek black finish and high-quality cork handle. The image is shot with a shallow depth of field, focusing on the texture of the rod against a minimal, bright white and teal studio setting. The lighting is balanced and crisp, evoking a sense of rugged reliability and technological precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHxZNhRaRl0eNyxYbm2_p-1yeIYENEvuu9bGCuvwy6P1hkfz212T9jLwWfS0HFamr71r7WFU6X8noUaSttlaOur0wei8C8kLNClOPaBdSHyQXJfGD-Kg93LTF1P7lTxuHK4l_FXvL3wDR4K1eO-7yNw97NSNC_EpTrMc3RgzfMwB_e38g8QeIh1fhtfNbM5sNmcfz8nx9JR3n-CaIIDmdAiavAFJw1NRSyvYYuqpX0jXBLpk1wKPBgv1hGWA-bssmp-RdSrrJUtWI"/>
+</div>
+<span class="font-title-sm text-[14px] text-primary">Shimano Teramar Southeast</span>
+</div>
+</td>
+<td class="py-md px-md text-body-sm text-on-surface-variant">Shimano</td>
+<td class="py-md px-md text-body-sm text-on-surface-variant">Cañas</td>
+<td class="py-md px-md font-bold text-primary">$215.00</td>
+<td class="py-md px-md">
+<span class="bg-secondary/10 text-secondary text-[12px] font-bold px-sm py-1 rounded-full">42</span>
+</td>
+<td class="py-md px-md text-center">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary">visibility</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors group cursor-pointer bg-white">
+<td class="py-md px-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-slate-100 rounded border border-outline-variant overflow-hidden">
+<img alt="Señuelo Rapala" class="w-full h-full object-cover" data-alt="A collection of vibrant, colorful fishing lures arranged neatly on a clean white surface. The lures feature metallic finishes and realistic eye details. High-key, shadowless lighting creates a professional product photography look, highlighting the variety and quality of the tackle. The color palette includes pops of teal, orange, and chrome." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEtHR3YSu3wPYqbpR2Jae4fyjOnpXrPlRnlL0nn602im5dvHQJKBKHsvQAn-6B14uCzA6OeGDXKN9_3fILNYwVB4TjGerS2tu9ncSt8yjaKp1ccaB0fR3KZ4Srk4A3XrThW7kTHH_2R9lpFLDVonTzYlMJJRrc1JSaoGQaWxrhi5HIN2uayYizPvwzUeFhZUKEbVjOTeat4sjfA0h-yQSyNqh2VrRwIsHrm0EXLXxg7TZrOouAcQ4KrtZBJNFxwQaW4_zqKPZItps"/>
+</div>
+<span class="font-title-sm text-[14px] text-primary">Rapala X-Rap Saltwater</span>
+</div>
+</td>
+<td class="py-md px-md text-body-sm text-on-surface-variant">Rapala</td>
+<td class="py-md px-md text-body-sm text-on-surface-variant">Señuelos</td>
+<td class="py-md px-md font-bold text-primary">$18.50</td>
+<td class="py-md px-md">
+<span class="bg-amber-100 text-amber-stock text-[12px] font-bold px-sm py-1 rounded-full">12</span>
+</td>
+<td class="py-md px-md text-center">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary">visibility</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors group cursor-pointer bg-slate-50/50">
+<td class="py-md px-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-slate-100 rounded border border-outline-variant overflow-hidden">
+<img alt="Fluorocarbono" class="w-full h-full object-cover" data-alt="Spools of clear fluorocarbon fishing line stacked in a precise arrangement. The translucent material catches the light, creating subtle prismatic effects. The setting is a clean, modern inventory warehouse with cool, soft overhead lighting. The visual style is minimal and corporate, focusing on the transparency and high-density organization of the product." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwJudI7yU85ir1gO881fQY4JH93rxCY2inbPvfP4DxWtlQ15IsMOsaD2D2iMle5WEJ0gv2c5ZkAxpX5LxMb_-9FXhtj31ODiRPFfN-F4cn9DrACJMmSieACjkHGXYcHTIidGgAbSVtqSVc4VOPBDZGuiiRySDVRzji5106blSWIA-AQbQW_VMjxEzRn7ZCUh1oaoE63Cpk3okYzbrG5kKQTJQv2I_DQx5W6my3IwyGtZsuIRkLUbhMIeC3PntgS925H42L0uBmGeI"/>
+</div>
+<span class="font-title-sm text-[14px] text-primary">Seaguar Blue Label 30lb</span>
+</div>
+</td>
+<td class="py-md px-md text-body-sm text-on-surface-variant">Seaguar</td>
+<td class="py-md px-md text-body-sm text-on-surface-variant">Hilos</td>
+<td class="py-md px-md font-bold text-primary">$29.99</td>
+<td class="py-md px-md">
+<span class="bg-secondary/10 text-secondary text-[12px] font-bold px-sm py-1 rounded-full">115</span>
+</td>
+<td class="py-md px-md text-center">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary">visibility</span>
+</td>
+</tr>
+<!-- More rows can be added here -->
+</tbody>
+</table>
+<div class="bg-surface-container-low p-md border-t border-outline-variant flex justify-between items-center">
+<p class="text-body-sm text-on-surface-variant">Mostrando 4 de 128 productos</p>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded border border-outline-variant bg-white shadow-sm flex items-center justify-center font-bold text-secondary">1</button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-white transition-colors">2</button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-white transition-colors">3</button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right: Details Panel -->
+<div class="col-span-4 bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden sticky top-[80px]">
+<div class="p-md border-b border-outline-variant flex items-center justify-between">
+<h3 class="font-title-sm text-title-sm text-primary">Detalles del Producto</h3>
+<button class="text-secondary font-label-caps uppercase hover:underline">Editar</button>
+</div>
+<form class="p-md space-y-md">
+<div class="space-y-xs">
+<label class="font-label-caps text-outline uppercase text-[10px]">Nombre del Producto</label>
+<input class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 font-body-md text-primary focus:ring-2 focus:ring-teal-brand/20" readonly="" type="text" value="Penn Battle III 6000"/>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="space-y-xs">
+<label class="font-label-caps text-outline uppercase text-[10px]">Marca</label>
+<input class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 font-body-md text-primary" readonly="" type="text" value="Penn"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-caps text-outline uppercase text-[10px]">Categoría</label>
+<input class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 font-body-md text-primary" readonly="" type="text" value="Carretes"/>
+</div>
+</div>
+<div class="pt-sm border-t border-outline-variant">
+<h4 class="font-label-caps text-outline uppercase tracking-wider mb-sm">Atributos Dinámicos</h4>
+<div class="space-y-md">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-bold text-on-surface-variant">Tamaño:</span>
+<span class="text-body-sm text-primary bg-slate-100 px-sm py-xs rounded">6000 Series</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-bold text-on-surface-variant">Peso:</span>
+<span class="text-body-sm text-primary bg-slate-100 px-sm py-xs rounded">589g</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-bold text-on-surface-variant">Color:</span>
+<div class="flex items-center gap-2">
+<span class="w-4 h-4 rounded-full bg-black ring-1 ring-slate-300"></span>
+<span class="text-body-sm text-primary">Negro/Oro</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-sm border-t border-outline-variant">
+<h4 class="font-label-caps text-outline uppercase tracking-wider mb-sm">Logística</h4>
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container rounded-lg p-sm">
+<p class="text-[10px] font-label-caps text-outline uppercase">Stock Actual</p>
+<p class="text-headline-md text-rose-stock">0</p>
+</div>
+<div class="bg-surface-container rounded-lg p-sm">
+<p class="text-[10px] font-label-caps text-outline uppercase">Stock Min.</p>
+<p class="text-headline-md text-primary">10</p>
+</div>
+</div>
+</div>
+<button class="w-full bg-teal-brand text-white py-md rounded-lg font-bold flex items-center justify-center gap-2 mt-md hover:bg-teal-700 transition-all" type="button">
+<span class="material-symbols-outlined">shopping_cart_checkout</span>
+                        Ordenar Reabastecimiento
+                    </button>
+</form>
+</div>
+</div>
+</main>
+<script>
+        // Simple micro-interaction for table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // Remove visual focus from all rows
+                document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('ring-2', 'ring-secondary/50', 'z-10'));
+                // Add to current
+                row.classList.add('ring-2', 'ring-secondary/50', 'z-10');
+                
+                // Simulate updating the right panel
+                const name = row.querySelector('.font-title-sm').textContent;
+                const brand = row.cells[1].textContent;
+                const category = row.cells[2].textContent;
+                const stock = row.cells[4].textContent.trim();
+                
+                document.querySelector('form input[value*="Penn"]').value = name;
+                document.querySelector('form div div input[value="Penn"]').value = brand;
+                document.querySelector('form div div input[value="Carretes"]').value = category;
+                
+                const stockDisplay = document.querySelector('.text-headline-md.text-rose-stock');
+                stockDisplay.textContent = stock;
+                if(parseInt(stock) > 10) {
+                    stockDisplay.className = 'text-headline-md text-secondary';
+                } else if (parseInt(stock) > 0) {
+                    stockDisplay.className = 'text-headline-md text-amber-stock';
+                } else {
+                    stockDisplay.className = 'text-headline-md text-rose-stock';
+                }
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+@theme {
+  --color-on-error: #ffffff;
+  --color-surface-bright: #fcf8fa;
+  --color-surface: #fcf8fa;
+  --color-surface-dim: #dcd9db;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f6f3f5;
+  --color-surface-container: #f0edef;
+  --color-surface-container-high: #eae7e9;
+  --color-surface-container-highest: #e4e2e4;
+  --color-on-surface: #1b1b1d;
+  --color-on-surface-variant: #45464d;
+  --color-outline: #76777d;
+  --color-outline-variant: #c6c6cd;
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --color-secondary: #00687a;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #57dffe;
+  --color-on-secondary-container: #006172;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-teal-brand: #008080;
+  --color-amber-stock: #d97706;
+  --color-rose-stock: #e11d48;
+  --color-inverse-surface: #2e2e2e;
+  --color-background: #fcf8fa;
+  --color-on-background: #1b1b1d;
+
+  --font-family-body: Inter, sans-serif;
+  --font-family-display: Inter, sans-serif;
+
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+}
+
+body {
+  font-family: Inter, sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
+.dark {
+  --color-on-error: #ffffff;
+  --color-surface-bright: #2a2a2a;
+  --color-surface: #000000;
+  --color-surface-dim: #000000;
+  --color-surface-container-lowest: #0d0d0d;
+  --color-surface-container-low: #141414;
+  --color-surface-container: #1a1a1a;
+  --color-surface-container-high: #222222;
+  --color-surface-container-highest: #2a2a2a;
+  --color-on-surface: #ffffff;
+  --color-on-surface-variant: #a0a0a0;
+  --color-outline: #555555;
+  --color-outline-variant: #333333;
+  --color-primary: #ffffff;
+  --color-on-primary: #000000;
+  --color-secondary: #ffffff;
+  --color-on-secondary: #000000;
+  --color-secondary-container: #2a2a2a;
+  --color-on-secondary-container: #ffffff;
+  --color-error: #ff6b6b;
+  --color-error-container: #440000;
+  --color-on-error-container: #ffb4ab;
+  --color-inverse-surface: #e2e2e2;
+  --color-background: #000000;
+  --color-on-background: #ffffff;
+  --color-teal-brand: #0d9488;
+  --color-amber-stock: #fbbf24;
+  --color-rose-stock: #fb7185;
+}
+
+.dark .bg-white:not([data-keep-white]) {
+  background-color: var(--color-surface-container-low);
+}
+
+.dark .bg-slate-50 {
+  background-color: var(--color-surface-container-low);
+}
+
+.dark .border-slate-200 {
+  border-color: var(--color-outline-variant);
+}
+
+.dark .hover\:bg-slate-100:hover {
+  background-color: var(--color-surface-container);
+}
+
+.dark .hover\:bg-slate-50:hover {
+  background-color: var(--color-surface-container);
+}
+
+.dark .bg-slate-50\/50 {
+  background-color: var(--color-surface-container);
+}
+
+.dark .hover\:bg-slate-50\/50:hover {
+  background-color: var(--color-surface-container);
+}
+
+.dark .bg-rose-50 { background-color: color-mix(in srgb, var(--color-rose-stock) 10%, transparent); }
+.dark .bg-amber-50 { background-color: color-mix(in srgb, var(--color-amber-stock) 10%, transparent); }
+.dark .border-rose-200 { border-color: color-mix(in srgb, var(--color-rose-stock) 30%, transparent); }
+.dark .border-amber-200 { border-color: color-mix(in srgb, var(--color-amber-stock) 30%, transparent); }
+.dark .bg-rose-100 { background-color: color-mix(in srgb, var(--color-rose-stock) 18%, transparent); }
+.dark .bg-amber-100 { background-color: color-mix(in srgb, var(--color-amber-stock) 18%, transparent); }
+
+.dark .hover\:bg-rose-100:hover { background-color: color-mix(in srgb, var(--color-rose-stock) 26%, transparent); }
+.dark .hover\:bg-amber-100:hover { background-color: color-mix(in srgb, var(--color-amber-stock) 26%, transparent); }
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 0.3s ease !important,
+              color 0.3s ease !important,
+              border-color 0.3s ease !important,
+              box-shadow 0.3s ease !important;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}

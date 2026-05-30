@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Marlin Poseidon - Dashboard Principal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#303032",
+                    "surface-container": "#f0edef",
+                    "secondary-container": "#57dffe",
+                    "surface-bright": "#fcf8fa",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f6f3f5",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e4e2e4",
+                    "on-background": "#1b1b1d",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "on-surface-variant": "#45464d",
+                    "background": "#fcf8fa",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "surface": "#fcf8fa",
+                    "surface-container-highest": "#e4e2e4",
+                    "on-surface": "#1b1b1d",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "secondary-fixed": "#acedff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "inverse-primary": "#bec6e0",
+                    "tertiary-fixed": "#d3e4fe",
+                    "on-primary-fixed": "#131b2e",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "primary": "#000000",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container-high": "#eae7e9",
+                    "surface-dim": "#dcd9db",
+                    "surface-tint": "#565e74",
+                    "outline-variant": "#c6c6cd",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#001f26",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#006172",
+                    "on-error-container": "#93000a",
+                    "secondary": "#00687a",
+                    "primary-container": "#131b2e",
+                    "on-tertiary-container": "#75859d",
+                    "tertiary": "#000000",
+                    "outline": "#76777d",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#f3f0f2",
+                    "tertiary-container": "#0b1c30",
+                    "on-primary-container": "#7c839b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "48px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "xs": "4px",
+                    "lg": "32px",
+                    "container-max": "1440px",
+                    "sidebar-width": "260px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-active {
+            @apply text-primary font-bold bg-secondary-container/20 rounded-lg;
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] border-r border-outline-variant/30 bg-surface-container/90 backdrop-blur-xl flex-col p-md gap-xs hidden md:flex z-50">
+<div class="mb-xl px-sm">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">Marlin Poseidon</h1>
+</div>
+<nav class="flex flex-col gap-xs flex-grow">
+<!-- Dashboard (Active) -->
+<a class="flex items-center gap-md px-md py-sm text-primary font-bold bg-secondary-container/20 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md text-body-md">Verificación de Pagos</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md text-body-md">Gestión de Inventario</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-body-md text-body-md">Punto de Venta</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Gestión de Usuarios</span>
+</a>
+</nav>
+</aside>
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 w-full backdrop-blur-md border-b border-outline-variant/20 flex justify-between items-center px-lg py-md md:ml-[260px] md:w-[calc(100%-260px)] bg-surface-dim/80">
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-primary hover:text-primary transition-colors md:hidden" data-icon="menu">menu</button>
+<h2 class="font-headline-md text-headline-md font-extrabold text-primary">Dashboard</h2>
+</div>
+<div class="flex items-center gap-lg">
+<div class="hidden lg:flex items-center gap-xs text-on-surface-variant bg-surface-container-low px-md py-xs rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48" placeholder="Buscar pedido o SKU..." type="text"/>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="notifications">notifications</button>
+<div class="flex items-center gap-sm bg-surface-container-highest/50 px-sm py-xs rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-[12px]">CA</div>
+<span class="font-body-md text-body-md font-semibold text-primary">Carlos - Admin</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="md:ml-[260px] p-lg max-w-container-max mx-auto space-y-lg">
+<!-- Welcome Section -->
+<section class="flex flex-col md:flex-row justify-between items-end gap-md">
+<div>
+<h3 class="font-display-lg text-display-lg text-primary">Hola, Carlos</h3>
+<p class="font-body-md text-on-surface-variant">Bienvenido al centro de mando de Marlin Poseidon para hoy.</p>
+</div>
+</section>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Ventas del Día KPI - Full Width -->
+<div class="lg:col-span-12 bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md flex flex-col justify-between h-full">
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">VENTAS DEL DÍA</span>
+<div class="flex items-baseline gap-sm mt-xs">
+<span class="font-display-lg text-display-lg text-primary">$12,450.00</span>
+<span class="text-secondary font-bold text-body-sm flex items-center">
+<span class="material-symbols-outlined text-[16px]" data-icon="trending_up">trending_up</span>
+                                +14.2%
+                            </span>
+</div>
+</div>
+<div class="w-24 h-24">
+<img class="w-full h-full object-contain" data-alt="A clean, professional business growth chart showing an upward trend in teal and slate colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL-ol7DcNziPd8tVOdo_t74mhFyH3OjXg0eQk_cLT1Nq_pE0kxIofYxgRkqbsMwa9TtYu0YNAvu9r2_P1IZCkcJ3Bf-kBG_nYZHbknNFdcNacnBKY-XpelzgvH5T260-Il_auQ9WoJBy19Hf9sZ-yY-60zHWI4P7xlt73jqGU4iVReK5uFmjyuNCiM8rbJHF130lT194q3j1_j9Qftlgss2Bo5_NunOYZEQdpH4t6zBcYOsVfVQg0WsrdVXN9gbWOZc6mJCXlKehc"/>
+</div>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant">
+<span>Meta Diaria: $15,000</span>
+<span>83% Completado</span>
+</div>
+<div class="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-1000 w-[83%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Operational Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Stock Crítico -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md hover:shadow-md transition-all group">
+<div class="flex justify-between items-start">
+<div class="bg-error-container/10 p-sm rounded-lg text-error group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+<span class="font-label-caps text-label-caps bg-error-container text-on-error-container px-sm py-xs rounded-full">5 PRODUCTOS</span>
+</div>
+<div class="mt-md">
+<h4 class="font-body-md text-body-md text-on-surface-variant">Stock Crítico</h4>
+<span class="font-headline-md text-headline-md text-primary">SKU: SHIM-20</span>
+</div>
+</div>
+<!-- Pedidos por Enviar (New complementary non-POS metric) -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md hover:shadow-md transition-all group">
+<div class="flex justify-between items-start">
+<div class="bg-secondary-container/10 p-sm rounded-lg text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</div>
+<span class="font-label-caps text-label-caps bg-secondary-container/20 text-on-secondary-container px-sm py-xs rounded-full">12 PENDIENTES</span>
+</div>
+<div class="mt-md">
+<h4 class="font-body-md text-body-md text-on-surface-variant">Pedidos por Enviar</h4>
+<span class="font-headline-md text-headline-md text-primary">Próxima Salida: 15:00</span>
+</div>
+</div>
+</div>
+<!-- Activity Feed & Detailed Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg pb-xl">
+<!-- Activity Feed -->
+<div class="lg:col-span-7 bg-surface-container-lowest border border-outline-variant/30 rounded-xl flex flex-col">
+<div class="p-md border-b border-outline-variant/20 flex justify-between items-center">
+<h4 class="font-title-sm text-title-sm text-primary">Actividad Reciente</h4>
+<button class="text-secondary font-label-caps text-label-caps hover:underline">VER TODO</button>
+</div>
+<div class="divide-y divide-outline-variant/20 overflow-y-auto max-h-[400px] scrollbar-hide">
+<!-- Activity Item 1 -->
+<div class="p-md flex items-center gap-md hover:bg-surface-container-low transition-colors">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-primary">Pago verificado por <strong>Andrés L.</strong></p>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Pedido #9402 • Hace 5 min</span>
+</div>
+<div class="text-right">
+<span class="font-body-sm font-bold text-primary">$450.00</span>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="p-md flex items-center gap-md hover:bg-surface-container-low transition-colors">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="edit_square">edit_square</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-primary">Stock actualizado por <strong>Sistema</strong></p>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Anzuelos Pro-Jig • Hace 12 min</span>
+</div>
+<div class="text-right">
+<span class="font-body-sm font-bold text-error">-15 unidades</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Contextual Actions / Quick Links -->
+<div class="lg:col-span-5 space-y-lg">
+<div class="bg-surface-container-high/40 border border-outline-variant/30 rounded-xl p-md">
+<h4 class="font-title-sm text-title-sm text-primary mb-md">Acciones Rápidas</h4>
+<div class="grid grid-cols-2 gap-md">
+<button class="flex flex-col items-center gap-sm p-md bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all">
+<span class="material-symbols-outlined text-[32px]" data-icon="add_box">add_box</span>
+<span class="font-label-caps text-label-caps">NUEVO PRODUCTO</span>
+</button>
+<button class="flex flex-col items-center gap-sm p-md bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all">
+<span class="material-symbols-outlined text-[32px]" data-icon="file_download">file_download</span>
+<span class="font-label-caps text-label-caps">EXPORTAR REPORTE</span>
+</button>
+<button class="flex flex-col items-center gap-sm p-md bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all col-span-2">
+<span class="material-symbols-outlined text-[32px]" data-icon="support_agent">support_agent</span>
+<span class="font-label-caps text-label-caps">SOPORTE MARLIN</span>
+</button>
+</div>
+</div>
+<!-- Small Promo / Info Banner -->
+<div class="rounded-xl overflow-hidden relative h-[180px] flex items-end p-md group">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A cinematic wide shot of a professional deep-sea fishing vessel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY1plJl_th1Nz8PbdeIwUWDJ26aj2dC57aXfkTRjtWA970THacbKwcGBXGASo4xDzemeFd6ySN_194XcZsF4ewdHTsSNsHn9D-4q0j1pN5mnUwR4vi9kaKooeRGYgxzC_skCc9hnBppHxaEaGQkrdZKXwp-OFeab-44mk7vDkv70KiVnxY7eIcUnCi_DYrQi2vj3K6GRrYE5tYODEqP09JIsQpHwB82oqypFMhRPOO1MivHiraqu79ZVIV8_Zn_GTFhoXmqsnWI34"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="relative z-10">
+<p class="text-white font-headline-md text-[18px] leading-tight mb-xs">Nuevos Equipos de Altura Shimano 2024</p>
+<span class="bg-secondary text-white font-label-caps text-label-caps px-md py-1 rounded-full cursor-pointer">REVISAR INVENTARIO</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/95 backdrop-blur-lg border-t border-outline-variant/30 flex justify-around items-center h-16 px-4 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/10 rounded-xl px-3 py-1 scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Pagos</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Stock</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-md text-label-md">POS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+</nav>
+<script>
+        // Responsive behavior for sidebar
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                document.querySelector('aside').classList.add('flex');
+                document.querySelector('aside').classList.remove('hidden');
+            }
+        });
+    </script>
+</body></html>

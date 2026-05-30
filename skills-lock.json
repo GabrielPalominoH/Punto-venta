@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "invoice-generator": {
+      "source": "claude-office-skills/skills",
+      "sourceType": "github",
+      "skillPath": "invoice-generator/SKILL.md",
+      "computedHash": "9f36d7e269ca1ebd2836f4a186bee138f38a94c6918c4d6a2a6d4425ea4e57c9"
+    }
+  }
+}

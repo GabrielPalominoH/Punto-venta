@@ -1,0 +1,12 @@
+.active-nav-border {
+  border-right: 4px solid #00687a;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

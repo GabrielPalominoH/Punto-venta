@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "surface-bright": "#fcf8fa",
+                        "inverse-primary": "#bec6e0",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-secondary-fixed": "#001f26",
+                        "on-tertiary-container": "#75859d",
+                        "primary": "#000000",
+                        "inverse-on-surface": "#f3f0f2",
+                        "surface-tint": "#565e74",
+                        "tertiary-fixed": "#d3e4fe",
+                        "primary-container": "#131b2e",
+                        "tertiary-container": "#0b1c30",
+                        "surface-container": "#f0edef",
+                        "surface-container-high": "#eae7e9",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface": "#fcf8fa",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c6c6cd",
+                        "surface-container-low": "#f6f3f5",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "secondary-fixed": "#acedff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "surface-variant": "#e4e2e4",
+                        "on-secondary-container": "#006172",
+                        "on-surface": "#1b1b1d",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-container": "#7c839b",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#dae2fd",
+                        "tertiary": "#000000",
+                        "on-background": "#1b1b1d",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#76777d",
+                        "background": "#fcf8fa",
+                        "inverse-surface": "#303032",
+                        "on-primary-fixed": "#131b2e",
+                        "error-container": "#ffdad6",
+                        "secondary": "#00687a",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#57dffe",
+                        "on-surface-variant": "#45464d",
+                        "surface-dim": "#dcd9db",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "surface-container-highest": "#e4e2e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "lg": "32px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "container-max": "1440px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-md px-sm overflow-y-auto z-50">
+<div class="mb-xl px-sm">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">anchor</span>
+</div>
+<div>
+<h1 class="text-primary font-bold text-title-sm tracking-tight leading-tight">Marlin Poseidon</h1>
+<p class="text-on-surface-variant font-label-caps text-[10px] uppercase">Admin Dashboard</p>
+</div>
+</div>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-sm px-sm py-3 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-3 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Verificación de Pagos</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-3 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Gestión de Inventario</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-3 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span>Punto de Venta</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-3 rounded-lg text-secondary font-bold bg-secondary-container/10 border-r-4 border-secondary transition-all duration-200 scale-98" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Gestión de Usuarios</span>
+</a>
+</nav>
+<div class="mt-auto pt-md border-t border-outline-variant">
+<div class="flex items-center gap-sm px-sm py-2">
+<img alt="Carlos - Admin" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A professional headshot of a middle-aged male administrator with a confident expression. He is set against a clean, modern office backdrop with soft daylight. The overall image has a corporate yet approachable aesthetic with cool blue and slate tones that match a high-end enterprise software interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuACMRIs66kVmbrgaXgiVLyvZo-0Vwp12qBjcbENoXZOogfgNwPYCS0wCNJWbjLK5TJMq5MJNNtrMveeIEiz9OOPwOn65H_TVaXYCwHo6DEfjNFlV4GJaZJphuoPJYSxsHY4VBPRumRLh8n8zJbCr50DlUpX32i1O1G8OnFBb0_tl0-WUObwJJ1SpoG9vAp0GYK-oY0B2aPax8XSIbAnEYkdburl0s6jbVO2y3-8Omv-IxLSpYZYGn4-AkKohS8Bn8KQ7DXK_tgJO-g"/>
+<div class="flex-grow overflow-hidden">
+<p class="font-title-sm text-sm text-on-surface truncate">Carlos Méndez</p>
+<p class="font-label-caps text-[10px] text-on-surface-variant">SUPER ADMIN</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[260px] flex-grow flex flex-col min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<header class="sticky top-0 z-40 bg-surface border-b border-outline-variant shadow-sm flex justify-between items-center h-[64px] px-lg w-full">
+<div class="flex items-center flex-grow max-w-md">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full py-1.5 pl-10 pr-4 text-body-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" placeholder="Buscar usuarios o registros..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:bg-surface-container-low p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="hover:bg-surface-container-low p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-xs"></div>
+<div class="flex items-center gap-sm">
+<span class="font-label-caps text-on-surface-variant">ADMIN PORTAL</span>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-lg flex-grow space-y-lg max-w-container-max mx-auto w-full">
+<!-- Header Action Row -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary">Gestión de Usuarios</h2>
+<p class="font-body-md text-on-surface-variant">Administra el acceso del personal y monitorea la actividad del sistema.</p>
+</div>
+<button class="bg-secondary text-on-secondary px-lg py-3 rounded-xl font-title-sm flex items-center gap-sm shadow-md hover:opacity-90 transition-all active:scale-95">
+<span class="material-symbols-outlined">person_add</span>
+                    Añadir Usuario
+                </button>
+</div>
+<!-- Bento Layout Content -->
+<div class="grid grid-cols-12 gap-lg h-full">
+<!-- Main Table Section -->
+<section class="col-span-12 lg:col-span-8 space-y-md">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<div class="px-md py-4 border-b border-outline-variant bg-surface-bright flex justify-between items-center">
+<h3 class="font-title-sm text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary">badge</span>
+                                Usuarios Activos
+                            </h3>
+<div class="flex gap-xs">
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined text-on-surface-variant text-sm">filter_list</span></button>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined text-on-surface-variant text-sm">download</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-md py-4 font-label-caps text-on-surface-variant uppercase tracking-wider">Nombre</th>
+<th class="px-md py-4 font-label-caps text-on-surface-variant uppercase tracking-wider">Username</th>
+<th class="px-md py-4 font-label-caps text-on-surface-variant uppercase tracking-wider">Rol</th>
+<th class="px-md py-4 font-label-caps text-on-surface-variant uppercase tracking-wider">Último Acceso</th>
+<th class="px-md py-4 font-label-caps text-on-surface-variant uppercase tracking-wider text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 text-secondary flex items-center justify-center font-bold">CM</div>
+<div>
+<p class="font-title-sm text-sm text-primary">Carlos Méndez</p>
+<p class="text-xs text-on-surface-variant">carlos.m@marlin.com</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm text-on-surface">cmendez_admin</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase tracking-tighter border border-secondary/20">Admin</span>
+</td>
+<td class="px-md py-4 text-body-sm text-on-surface-variant">Hoy, 09:15 AM</td>
+<td class="px-md py-4 text-right">
+<button class="p-2 opacity-0 group-hover:opacity-100 hover:bg-surface-container transition-all rounded-lg"><span class="material-symbols-outlined text-on-surface-variant">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/20 text-on-tertiary-container flex items-center justify-center font-bold">AL</div>
+<div>
+<p class="font-title-sm text-sm text-primary">Ana López</p>
+<p class="text-xs text-on-surface-variant">ana.lopez@marlin.com</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm text-on-surface">alopez_pos</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 bg-on-tertiary-container/10 text-on-tertiary-container rounded-full text-xs font-bold uppercase tracking-tighter border border-on-tertiary-container/20">Operador</span>
+</td>
+<td class="px-md py-4 text-body-sm text-on-surface-variant">Ayer, 18:42 PM</td>
+<td class="px-md py-4 text-right">
+<button class="p-2 opacity-0 group-hover:opacity-100 hover:bg-surface-container transition-all rounded-lg"><span class="material-symbols-outlined text-on-surface-variant">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-bold">JR</div>
+<div>
+<p class="font-title-sm text-sm text-primary">Jorge Ruiz</p>
+<p class="text-xs text-on-surface-variant">jruiz_inv@marlin.com</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm text-on-surface">jruiz_stock</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 bg-outline-variant/20 text-on-surface-variant rounded-full text-xs font-bold uppercase tracking-tighter border border-outline-variant/30">Inventario</span>
+</td>
+<td class="px-md py-4 text-body-sm text-on-surface-variant">05 Oct, 11:30 AM</td>
+<td class="px-md py-4 text-right">
+<button class="p-2 opacity-0 group-hover:opacity-100 hover:bg-surface-container transition-all rounded-lg"><span class="material-symbols-outlined text-on-surface-variant">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 text-secondary flex items-center justify-center font-bold">EV</div>
+<div>
+<p class="font-title-sm text-sm text-primary">Elena Vargas</p>
+<p class="text-xs text-on-surface-variant">evargas@marlin.com</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm text-on-surface">elena_v</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase tracking-tighter border border-secondary/20">Admin</span>
+</td>
+<td class="px-md py-4 text-body-sm text-on-surface-variant">Hace 2 horas</td>
+<td class="px-md py-4 text-right">
+<button class="p-2 opacity-0 group-hover:opacity-100 hover:bg-surface-container transition-all rounded-lg"><span class="material-symbols-outlined text-on-surface-variant">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-md py-4 bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant text-xs">Mostrando 4 de 12 usuarios</span>
+<div class="flex gap-2">
+<button class="p-1 border border-outline-variant rounded hover:bg-surface-container transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-1 border border-outline-variant rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Stats Grid (Asymmetric) -->
+<div class="grid grid-cols-2 gap-md">
+<div class="bg-surface-bright border border-outline-variant p-md rounded-xl shadow-sm flex items-center justify-between">
+<div>
+<p class="font-label-caps text-on-surface-variant uppercase text-xs">Sesiones Activas</p>
+<h4 class="font-display-lg text-secondary">08</h4>
+</div>
+<div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">wifi_tethering</span>
+</div>
+</div>
+<div class="bg-surface-bright border border-outline-variant p-md rounded-xl shadow-sm flex items-center justify-between">
+<div>
+<p class="font-label-caps text-on-surface-variant uppercase text-xs">Último Intento Fallido</p>
+<h4 class="font-display-lg text-error">N/A</h4>
+</div>
+<div class="w-12 h-12 bg-error/10 rounded-full flex items-center justify-center text-error">
+<span class="material-symbols-outlined">lock_open</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Audit Log Section (Vertical Timeline) -->
+<section class="col-span-12 lg:col-span-4 h-full">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col h-full shadow-sm">
+<div class="px-md py-4 border-b border-outline-variant bg-surface-bright">
+<h3 class="font-title-sm text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary">history</span>
+                                Registro de Auditoría
+                            </h3>
+<p class="text-xs text-on-surface-variant font-body-sm">Actividad reciente del sistema</p>
+</div>
+<div class="flex-grow overflow-y-auto p-md space-y-lg relative">
+<!-- Timeline line -->
+<div class="absolute left-[37px] top-md bottom-md w-0.5 bg-outline-variant/50"></div>
+<!-- Timeline Item 1 -->
+<div class="relative flex gap-md">
+<div class="relative z-10 w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<div class="pt-1">
+<p class="font-title-sm text-sm text-primary leading-snug">Carlos approved order #1024</p>
+<p class="text-xs text-on-surface-variant mb-2">Hace 12 minutos</p>
+<div class="bg-surface-container-low p-2 rounded-lg border border-outline-variant/30 text-[11px] text-on-surface-variant">
+                                        Monto: $1,240.00 | Cliente: Pesca Pro S.A.
+                                    </div>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative flex gap-md">
+<div class="relative z-10 w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center shrink-0 shadow-sm border border-outline-variant">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+</div>
+<div class="pt-1">
+<p class="font-title-sm text-sm text-primary leading-snug">Elena Vargas created new user: <span class="text-secondary">m_sosa</span></p>
+<p class="text-xs text-on-surface-variant">Hace 45 minutos</p>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative flex gap-md">
+<div class="relative z-10 w-10 h-10 rounded-full bg-error/10 text-error flex items-center justify-center shrink-0 shadow-sm border border-error/20">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<div class="pt-1">
+<p class="font-title-sm text-sm text-primary leading-snug">System: Stock Alert</p>
+<p class="text-xs text-on-surface-variant mb-2">Hace 2 horas</p>
+<div class="bg-error-container/20 p-2 rounded-lg border border-error/10 text-[11px] text-error">
+                                        Producto: Carrete Shimano Stella 4000 se encuentra agotado.
+                                    </div>
+</div>
+</div>
+<!-- Timeline Item 4 -->
+<div class="relative flex gap-md">
+<div class="relative z-10 w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center shrink-0 shadow-sm border border-outline-variant">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</div>
+<div class="pt-1">
+<p class="font-title-sm text-sm text-primary leading-snug">Ana López updated POS prices</p>
+<p class="text-xs text-on-surface-variant">Hoy, 08:30 AM</p>
+</div>
+</div>
+<!-- Timeline Item 5 -->
+<div class="relative flex gap-md">
+<div class="relative z-10 w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center shrink-0 shadow-sm border border-outline-variant">
+<span class="material-symbols-outlined text-[20px]">login</span>
+</div>
+<div class="pt-1">
+<p class="font-title-sm text-sm text-primary leading-snug">Carlos Méndez logged in</p>
+<p class="text-xs text-on-surface-variant">Hoy, 07:15 AM</p>
+</div>
+</div>
+</div>
+<div class="p-md border-t border-outline-variant">
+<button class="w-full text-center py-2 text-xs font-label-caps text-secondary hover:bg-secondary/5 rounded-lg transition-colors">
+                                Ver Todo el Historial
+                            </button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Interactive Layer: Simple Tooltip or Hover logic -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Placeholder for future interactions
+            console.log('Marlin Poseidon Admin Dashboard - Ready');
+            
+            // Subtle hover effect for table rows
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                row.addEventListener('mouseenter', () => {
+                    row.classList.add('translate-x-1');
+                });
+                row.addEventListener('mouseleave', () => {
+                    row.classList.remove('translate-x-1');
+                });
+            });
+        });
+    </script>
+</body></html>
