@@ -506,6 +506,7 @@ export default function Inventario() {
                 cancelEditing={cancelEditing}
                 handleImageUpload={handleImageUpload}
                 getStockColor={getStockColor}
+                mobile
               />
             </div>
           </div>
@@ -729,22 +730,30 @@ export default function Inventario() {
   );
 }
 
-function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEditing, cancelEditing, handleImageUpload, getStockColor }) {
+function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEditing, cancelEditing, handleImageUpload, getStockColor, mobile }) {
   return (
-    <div className="w-full @md:w-[420px] bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
-      <div className="p-4 border-b border-outline-variant flex items-center justify-between">
-        <h3 className="font-semibold text-lg text-primary">Detalles del Producto</h3>
-        <div className="flex gap-2">
-          {editing ? (
-            <>
-              <button onClick={cancelEditing} className="text-xs font-bold text-outline uppercase hover:underline px-3 py-1 border border-outline-variant rounded-lg">Cancelar</button>
-              <button onClick={saveEditing} className="text-xs font-bold text-on-secondary uppercase hover:underline px-3 py-1 bg-secondary rounded-lg">Guardar</button>
-            </>
-          ) : (
-            <button onClick={() => setEditing(true)} className="text-secondary text-xs font-bold uppercase hover:underline">Editar</button>
-          )}
+    <div className={`w-full ${mobile ? "" : "@md:w-[420px]"} bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden`}>
+      {!mobile && (
+        <div className="p-4 border-b border-outline-variant flex items-center justify-between">
+          <h3 className="font-semibold text-lg text-primary">Detalles del Producto</h3>
+          <div className="flex gap-2">
+            {editing ? (
+              <>
+                <button onClick={cancelEditing} className="text-xs font-bold text-outline uppercase hover:underline px-3 py-1 border border-outline-variant rounded-lg">Cancelar</button>
+                <button onClick={saveEditing} className="text-xs font-bold text-on-secondary uppercase hover:underline px-3 py-1 bg-secondary rounded-lg">Guardar</button>
+              </>
+            ) : (
+              <button onClick={() => setEditing(true)} className="text-secondary text-xs font-bold uppercase hover:underline">Editar</button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
+      {mobile && editing && (
+        <div className="p-4 border-b border-outline-variant flex items-center justify-end gap-2">
+          <button onClick={cancelEditing} className="text-xs font-bold text-outline uppercase hover:underline px-3 py-1 border border-outline-variant rounded-lg">Cancelar</button>
+          <button onClick={saveEditing} className="text-xs font-bold text-on-secondary uppercase hover:underline px-3 py-1 bg-secondary rounded-lg">Guardar</button>
+        </div>
+      )}
       <form className="p-4 space-y-4" onSubmit={(e) => e.preventDefault()}>
         <div className="flex justify-center">
           <div className="relative group">
