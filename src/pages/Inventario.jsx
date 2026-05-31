@@ -21,6 +21,8 @@ export default function Inventario() {
   const [showMobilePanel, setShowMobilePanel] = useState(false);
   const [stockModalType, setStockModalType] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [search, setSearch] = useState("");
+  const [highlightedId, setHighlightedId] = useState(null);
   const [newProduct, setNewProduct] = useState({
     name: "", brand: "", category: "", price: 0, stock: 0, minStock: 0,
     modalidad: "Spinning", caracteristicas: "", image: ""
@@ -80,6 +82,14 @@ export default function Inventario() {
   const lowStockThreshold = db.getLowStockThreshold();
   const outOfStock = products.filter((p) => p.stock === 0);
   const lowStock = products.filter((p) => p.stock > 0 && p.stock <= lowStockThreshold);
+  const inStock = products.filter((p) => p.stock > lowStockThreshold);
+  const filteredProducts = products.filter((p) => {
+    const term = search.trim().toLowerCase();
+    if (!term) return true;
+    return [p.name, p.brand, p.category, p.code]
+      .filter(Boolean)
+      .some((value) => value.toLowerCase().includes(term));
+  });
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
@@ -164,9 +174,143 @@ export default function Inventario() {
     return "text-secondary";
   };
 
+  const getMobileStockBadge = (stock) => {
+    if (stock === 0) return "bg-error/10 text-error border-error/20";
+    if (stock <= lowStockThreshold) return "bg-amber-100 text-amber-stock border-amber-200";
+    return "bg-secondary/10 text-secondary border-secondary/20";
+  };
+
+  const getMobileStockLabel = (stock) => {
+    if (stock === 0) return "AGOTADO";
+    if (stock <= lowStockThreshold) return `${stock} STOCK BAJO`;
+    return `${stock} EN STOCK`;
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    <div className="space-y-6 @container">
+      {/* Mobile stock summary cards */}
+      <div className="@md:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide flex gap-6 py-2">
+        <button
+          onClick={() => setStockModalType("agotado")}
+          className="min-w-[160px] bg-surface-container-lowest border border-error/20 p-6 rounded-xl shadow-sm text-left"
+        >
+          <span className="text-xs font-bold tracking-wider text-error uppercase mb-1 block">Agotado</span>
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-bold text-primary">{outOfStock.length}</span>
+            <span className="text-sm text-on-surface-variant">items</span>
+          </div>
+          <div className="mt-2 w-full bg-error/10 h-1 rounded-full overflow-hidden">
+            <div className="bg-error h-full w-full"></div>
+          </div>
+        </button>
+        <button
+          onClick={() => setStockModalType("stock_bajo")}
+          className="min-w-[160px] bg-surface-container-lowest border border-amber-200 p-6 rounded-xl shadow-sm text-left"
+        >
+          <span className="text-xs font-bold tracking-wider text-amber-stock uppercase mb-1 block">Stock Bajo</span>
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-bold text-primary">{lowStock.length}</span>
+            <span className="text-sm text-on-surface-variant">items</span>
+          </div>
+          <div className="mt-2 w-full bg-amber-100 h-1 rounded-full overflow-hidden">
+            <div className="bg-amber-stock h-full w-2/3"></div>
+          </div>
+        </button>
+        <div className="min-w-[160px] bg-surface-container-lowest border border-secondary/20 p-6 rounded-xl shadow-sm">
+          <span className="text-xs font-bold tracking-wider text-secondary uppercase mb-1 block">En Stock</span>
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-bold text-primary">{inStock.length}</span>
+            <span className="text-sm text-on-surface-variant">items</span>
+          </div>
+          <div className="mt-2 w-full bg-secondary/10 h-1 rounded-full overflow-hidden">
+            <div className="bg-secondary h-full w-full"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile search + actions */}
+      <div className="@md:hidden space-y-3">
+        <div className="relative">
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all text-sm"
+            placeholder="Buscar productos..."
+            type="text"
+          />
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex-1 bg-secondary text-on-secondary font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-transform"
+          >
+            <span className="material-symbols-outlined">add</span>
+            Nuevo Producto
+          </button>
+          <button className="p-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface-variant active:bg-surface-container">
+            <span className="material-symbols-outlined">filter_list</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile product list */}
+      <section className="@md:hidden space-y-3 pb-24">
+        <h2 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider px-1">Inventario Reciente</h2>
+        {filteredProducts.map((p) => (
+          <div
+            key={p.id}
+            id={`product-row-${p.id}`}
+            onClick={() => { if (editing) setEditing(false); setSelected(p); setMenuOpenId(null); setShowMobilePanel(true); }}
+            className={`bg-surface-container-lowest border rounded-xl p-3 flex gap-4 active:bg-surface-container-low transition-all duration-300 ${highlightedId === p.id ? "border-secondary ring-2 ring-secondary/30 shadow-md" : "border-outline-variant"}`}
+          >
+            <img
+              src={p.image}
+              alt={p.name}
+              className="w-20 h-20 bg-surface-container rounded-lg object-cover shrink-0"
+              onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
+            />
+            <div className="w-20 h-20 bg-surface-container rounded-lg items-center justify-center text-sm font-bold text-on-surface-variant hidden shrink-0">
+              {p.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
+            </div>
+            <div className="min-w-0 flex-1 flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-semibold text-base text-primary leading-tight line-clamp-2">{p.name}</h3>
+                  <span className="text-secondary font-bold text-sm whitespace-nowrap">S/ {p.price.toFixed(2)}</span>
+                </div>
+                <p className="text-sm text-on-surface-variant truncate">{p.brand} · {p.category}</p>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${getMobileStockBadge(p.stock)}`}>
+                  {getMobileStockLabel(p.stock)}
+                </span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right });
+                    setMenuOpenId(menuOpenId === p.id ? null : p.id);
+                  }}
+                  className="text-on-surface-variant p-1 rounded-lg active:bg-surface-container"
+                >
+                  <span className="material-symbols-outlined">more_vert</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+        {filteredProducts.length === 0 && (
+          <div className="p-8 text-center text-on-surface-variant bg-surface-container-lowest border border-outline-variant rounded-xl">
+            <span className="material-symbols-outlined text-4xl mb-2">search_off</span>
+            <p className="font-semibold">No hay productos para esta búsqueda</p>
+          </div>
+        )}
+      </section>
+
+      {/* Desktop header */}
+      <div className="hidden @md:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">Gestión de Inventario</h2>
           <p className="text-sm sm:text-base text-on-surface-variant">Supervise existencias, actualice atributos y gestione su catálogo de pesca.</p>
@@ -177,7 +321,8 @@ export default function Inventario() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* Desktop stock summary cards */}
+      <div className="hidden @md:grid grid-cols-1 sm:grid-cols-2 gap-4">
         <button
           onClick={() => setStockModalType("agotado")}
           className="p-4 rounded-xl flex items-center gap-4 border border-rose-200 bg-rose-50 hover:bg-rose-100 transition-all text-left cursor-pointer"
@@ -208,8 +353,9 @@ export default function Inventario() {
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 items-start">
-        <div className={`w-full transition-all duration-300 ease-in-out ${editing ? "lg:w-2/3" : "w-full"}`}>
+      {/* Desktop table + detail panel */}
+      <div className="hidden @md:flex flex-col @md:flex-row gap-6 items-start">
+        <div className={`w-full transition-all duration-300 ease-in-out ${editing ? "@md:w-2/3" : "w-full"}`}>
           <div className="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[600px] table-fixed border-collapse">
@@ -224,11 +370,11 @@ export default function Inventario() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant">
-                {products.map((p) => (
+                {filteredProducts.map((p) => (
                   <tr
                     key={p.id}
                     id={`product-row-${p.id}`}
-                    onClick={() => { if (editing) setEditing(false); setSelected(p); setMenuOpenId(null); if (window.innerWidth < 1024) setShowMobilePanel(true); }}
+                    onClick={() => { if (editing) setEditing(false); setSelected(p); setMenuOpenId(null); }}
                     className={`transition-all duration-200 cursor-pointer ${
                       selected.id === p.id
                         ? "bg-secondary/5 ring-2 ring-secondary/50 scale-[1.01] rounded-lg"
@@ -296,7 +442,7 @@ export default function Inventario() {
             </table>
             </div>
             <div className="bg-surface-container-low p-4 border-t border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-3">
-              <p className="text-sm text-on-surface-variant">Mostrando {products.length} de {products.length} productos</p>
+              <p className="text-sm text-on-surface-variant">Mostrando {filteredProducts.length} de {products.length} productos</p>
               <div className="flex gap-2">
                 {["chevron_left", "1", "2", "3", "chevron_right"].map((item, i) =>
                   item === "1" ? (
@@ -320,7 +466,7 @@ export default function Inventario() {
 
         {/* Desktop detail panel */}
         <div
-          className={`hidden lg:block transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`hidden @md:block transition-all duration-300 ease-in-out overflow-hidden ${
             editing ? "max-w-[420px] opacity-100" : "max-w-0 opacity-0"
           }`}
         >
@@ -338,7 +484,7 @@ export default function Inventario() {
         </div>
       </div>
 
-      {/* Mobile detail panel (bottom sheet) */}
+      {/* Mobile detail panel (bottom sheet) — uses viewport lg since it's fixed overlay */}
       {showMobilePanel && (
         <div className="fixed inset-0 z-50 flex items-end lg:hidden">
           <div className="fixed inset-0 bg-black/30" onClick={() => setShowMobilePanel(false)} />
@@ -366,10 +512,10 @@ export default function Inventario() {
         </div>
       )}
 
-      {/* Mobile edit button (always visible when a product is selected) */}
+      {/* Mobile edit button (fixed overlay) */}
       {!editing && selected.id !== -1 && (
         <button
-          onClick={() => { setEditing(true); if (window.innerWidth >= 1024) {} else setShowMobilePanel(true); }}
+          onClick={() => { setEditing(true); }}
           className="fixed bottom-6 right-6 lg:hidden bg-secondary text-on-secondary w-14 h-14 rounded-full shadow-lg flex items-center justify-center z-30 hover:opacity-90 active:scale-95 transition-all"
         >
           <span className="material-symbols-outlined">edit</span>
@@ -391,7 +537,7 @@ export default function Inventario() {
               {(stockModalType === "agotado" ? outOfStock : lowStock).map((p) => (
                 <div
                   key={p.id}
-                  onClick={() => { setSelected(p); setStockModalType(null); if (window.innerWidth < 1024) setShowMobilePanel(true); setTimeout(() => document.getElementById(`product-row-${p.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 100); }}
+                  onClick={() => { setSelected(p); setHighlightedId(p.id); setStockModalType(null); setTimeout(() => { document.getElementById(`product-row-${p.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => setHighlightedId(null), 2000); }, 100); }}
                   className="p-4 flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer"
                 >
                   <img
@@ -585,7 +731,7 @@ export default function Inventario() {
 
 function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEditing, cancelEditing, handleImageUpload, getStockColor }) {
   return (
-    <div className="w-full lg:w-[420px] bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+    <div className="w-full @md:w-[420px] bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
       <div className="p-4 border-b border-outline-variant flex items-center justify-between">
         <h3 className="font-semibold text-lg text-primary">Detalles del Producto</h3>
         <div className="flex gap-2">

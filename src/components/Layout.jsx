@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import ConfigModal from "./ConfigModal";
@@ -27,6 +27,8 @@ const notifications = [
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [showNotif, setShowNotif] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -53,6 +55,18 @@ export default function Layout() {
   }, []);
 
   const urgentCount = notifications.filter((n) => n.urgent).length;
+  const searchValue = searchParams.get("q") || "";
+  const isSearchablePage = location.pathname === "/punto-venta";
+
+  const handleSearchChange = (value) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (value.trim()) {
+      nextParams.set("q", value);
+    } else {
+      nextParams.delete("q");
+    }
+    setSearchParams(nextParams, { replace: true });
+  };
 
   const sidebar = (
     <aside ref={sidebarRef} className="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-6 px-3 overflow-y-auto z-50">
@@ -137,8 +151,10 @@ export default function Layout() {
             <div className={`relative w-full ${showMobileSearch ? "block" : "hidden sm:block"}`}>
               <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
               <input
+                value={searchValue}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="w-full bg-surface-container-low border border-outline-variant rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
-                placeholder="Buscar..."
+                placeholder={isSearchablePage ? "Buscar productos..." : "Buscar..."}
                 type="text"
               />
             </div>
@@ -186,8 +202,6 @@ export default function Layout() {
             <button onClick={() => setShowConfig(true)} className="hover:bg-surface-container-low p-2 rounded-full transition-colors">
               <span className="material-symbols-outlined text-on-surface-variant">settings</span>
             </button>
-            <div className="h-6 w-px bg-outline-variant mx-1"></div>
-            <span className="text-[10px] sm:text-xs font-semibold text-on-surface-variant uppercase tracking-wider">v2.4.0</span>
           </div>
         </header>
         {showConfig && <ConfigModal onClose={() => setShowConfig(false)} />}

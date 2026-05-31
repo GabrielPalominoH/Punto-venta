@@ -10,3 +10,45 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.pos-shell {
+  container-type: inline-size;
+}
+
+@container (max-width: 700px) {
+  .pos-shell {
+    overflow-x: hidden;
+  }
+
+  .pos-content {
+    overflow-x: hidden;
+    background: var(--color-surface);
+    padding: 1.5rem;
+    padding-bottom: 9rem;
+  }
+
+  .pos-toolbar {
+    display: none;
+  }
+
+  .pos-categories {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .pos-shell .pos-products {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    justify-content: center !important;
+    width: calc(100% - 1rem) !important;
+    max-width: 42rem !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    transform: translateX(0.875rem);
+  }
+
+  .pos-product-card {
+    min-width: 0;
+  }
+}
