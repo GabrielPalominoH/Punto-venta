@@ -491,9 +491,16 @@ export default function Inventario() {
           <div className="relative bg-white rounded-t-2xl shadow-xl w-full max-h-[80vh] overflow-y-auto pb-6">
             <div className="sticky top-0 bg-white pt-4 pb-2 px-4 border-b border-outline-variant flex items-center justify-between rounded-t-2xl z-10">
               <h3 className="font-semibold text-lg text-primary">Detalles del Producto</h3>
-              <button onClick={() => setShowMobilePanel(false)} className="p-2 hover:bg-surface-container-low rounded-lg">
-                <span className="material-symbols-outlined">close</span>
-              </button>
+              <div className="flex items-center gap-1">
+                {!editing && (
+                  <button onClick={() => { setEditing(true); }} className="p-2 text-secondary hover:bg-surface-container-low rounded-lg">
+                    <span className="material-symbols-outlined">edit</span>
+                  </button>
+                )}
+                <button onClick={() => setShowMobilePanel(false)} className="p-2 hover:bg-surface-container-low rounded-lg">
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
             </div>
             <div className="p-4">
               <DetailPanel
@@ -840,11 +847,14 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
         <div className="pt-3 border-t border-outline-variant">
           <h4 className="text-xs font-bold text-outline uppercase tracking-wider mb-3">Características</h4>
           <textarea
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary resize-none focus:ring-2 focus:ring-secondary/20"
-            rows={3}
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary resize-none focus:ring-2 focus:ring-secondary/20 overflow-hidden"
+            rows={editing ? 1 : 3}
             readOnly={!editing}
             value={editing ? draft.caracteristicas || "" : selected.caracteristicas || ""}
-            onChange={(e) => updateDraft("caracteristicas", e.target.value)}
+            onChange={(e) => {
+              updateDraft("caracteristicas", e.target.value);
+              if (editing) { e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; }
+            }}
           />
         </div>
         <div className="space-y-1">
