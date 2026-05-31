@@ -31,6 +31,7 @@ export default function Layout() {
   const [showConfig, setShowConfig] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notifSeen, setNotifSeen] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const notifRef = useRef(null);
   const sidebarRef = useRef(null);
 
@@ -120,17 +121,20 @@ export default function Layout() {
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
-      <div className={`fixed inset-y-0 left-0 z-50 transition-transform duration-300 lg:hidden ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <div className={`fixed inset-y-0 left-0 w-[260px] z-50 transition-transform duration-300 lg:hidden ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <button onClick={() => setSidebarOpen(false)} className="absolute top-3 right-3 z-[60] p-1.5 hover:bg-surface-container-high rounded-lg transition-colors">
+          <span className="material-symbols-outlined text-on-surface-variant">close</span>
+        </button>
         {sidebar}
       </div>
 
       <div className="flex-1 flex flex-col min-h-screen lg:ml-[260px]">
         <header className="sticky top-0 z-30 h-16 bg-surface border-b border-outline-variant shadow-sm flex items-center justify-between px-4 lg:px-6">
-          <div className="flex items-center gap-3 flex-1 max-w-md">
-            <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 -ml-2 hover:bg-surface-container-low rounded-lg transition-colors">
+          <div className="flex items-center gap-1 sm:gap-3 flex-1 max-w-md">
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 hover:bg-surface-container-low rounded-lg transition-colors">
               <span className="material-symbols-outlined text-on-surface-variant">menu</span>
             </button>
-            <div className="relative w-full hidden sm:block">
+            <div className={`relative w-full ${showMobileSearch ? "block" : "hidden sm:block"}`}>
               <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
               <input
                 className="w-full bg-surface-container-low border border-outline-variant rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
@@ -138,6 +142,9 @@ export default function Layout() {
                 type="text"
               />
             </div>
+            <button onClick={() => setShowMobileSearch(p => !p)} className="sm:hidden p-2 hover:bg-surface-container-low rounded-lg transition-colors">
+              <span className="material-symbols-outlined text-on-surface-variant">{showMobileSearch ? "close" : "search"}</span>
+            </button>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 relative" ref={notifRef}>
             <button onClick={() => { setShowNotif((p) => !p); if (!showNotif) setNotifSeen(true); }} className="hover:bg-surface-container-low p-2 rounded-full transition-colors relative">
@@ -149,7 +156,7 @@ export default function Layout() {
               )}
             </button>
             {showNotif && (
-              <div className="absolute top-14 right-0 sm:right-4 w-[320px] sm:w-[380px] bg-white rounded-xl shadow-xl border border-outline-variant overflow-hidden z-50">
+              <div className="fixed sm:absolute top-14 right-2 sm:right-4 w-[calc(100vw-16px)] sm:w-[380px] max-w-[380px] bg-white rounded-xl shadow-xl border border-outline-variant overflow-hidden z-50">
                 <div className="px-4 sm:px-5 py-4 border-b border-outline-variant flex items-center justify-between">
                   <h3 className="text-sm font-bold text-on-surface">Notificaciones</h3>
                   <span className="text-xs text-on-surface-variant">{notifSeen ? "0 sin leer" : `${notifications.length} sin leer`}</span>

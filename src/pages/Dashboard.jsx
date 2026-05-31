@@ -93,7 +93,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-6 sm:pb-12">
         <div className="bg-white border border-outline-variant/30 rounded-xl flex flex-col">
           <div className="p-4 sm:p-6 border-b border-outline-variant/20 flex justify-between items-center">
             <h4 className="text-base sm:text-lg font-semibold text-primary">Actividad Reciente</h4>
@@ -123,16 +123,16 @@ export default function Dashboard() {
             <h4 className="text-base sm:text-lg font-semibold text-primary mb-4">Acciones Rápidas</h4>
             <div className="flex flex-col items-center justify-center flex-1 gap-5 sm:gap-8">
               <div className="flex flex-col sm:flex-row justify-center gap-5 sm:gap-8 w-full max-w-[728px]">
-                <button onClick={() => navigate("/inventario", { state: { openAddModal: true } })} className="flex flex-col items-center justify-center gap-1 bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all shrink-0 w-full sm:w-[340px]" style={{ height: 140 }}>
+                <button onClick={() => navigate("/inventario", { state: { openAddModal: true } })} className="flex flex-col items-center justify-center gap-1 bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all shrink-0 w-full sm:w-[340px] h-[100px] sm:h-[140px]">
                   <span className="material-symbols-outlined text-4xl sm:text-5xl">add_box</span>
                   <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-wider leading-tight text-center">NUEVO<br/>PRODUCTO</span>
                 </button>
-                <button className="flex flex-col items-center justify-center gap-1 bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all shrink-0 w-full sm:w-[340px]" style={{ height: 140 }}>
+                <button className="flex flex-col items-center justify-center gap-1 bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all shrink-0 w-full sm:w-[340px] h-[100px] sm:h-[140px]">
                   <span className="material-symbols-outlined text-4xl sm:text-5xl">file_download</span>
                   <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-wider leading-tight text-center">EXPORTAR<br/>REPORTE</span>
                 </button>
               </div>
-              <button className="flex items-center justify-center gap-1.5 bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all shrink-0 mx-auto w-full max-w-[728px]" style={{ height: 140 }}>
+              <button className="flex items-center justify-center gap-1.5 bg-white border border-outline-variant/20 rounded-lg hover:border-secondary hover:text-secondary transition-all shrink-0 mx-auto w-full max-w-[728px] h-[100px] sm:h-[140px]">
                 <span className="material-symbols-outlined text-4xl sm:text-5xl">support_agent</span>
                 <span className="text-[14px] sm:text-[16px] font-bold uppercase tracking-wider">SOPORTE MARLIN</span>
               </button>
