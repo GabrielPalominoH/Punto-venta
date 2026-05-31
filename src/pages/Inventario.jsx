@@ -72,12 +72,12 @@ export default function Inventario() {
   }, [location.state]);
 
   useEffect(() => {
-    if (showAddModal || stockModalType) {
+    if (showAddModal || stockModalType || showMobilePanel) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-  }, [showAddModal, stockModalType]);
+  }, [showAddModal, stockModalType, showMobilePanel]);
 
   const lowStockThreshold = db.getLowStockThreshold();
   const outOfStock = products.filter((p) => p.stock === 0);
@@ -297,6 +297,25 @@ export default function Inventario() {
                 >
                   <span className="material-symbols-outlined">more_vert</span>
                 </button>
+                {menuOpenId === p.id && createPortal(
+                  <div ref={menuRef} className="bg-white border border-outline-variant rounded-lg shadow-xl min-w-[140px] py-1" style={{ position: 'fixed', top: menuPos.top, right: menuPos.right, zIndex: 50 }} onClick={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); startEditing(p); }}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
+                    >
+                      <span className="material-symbols-outlined text-base">edit</span>
+                      Editar
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); deleteProduct(p.id); }}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-error/10 transition-colors text-left"
+                    >
+                      <span className="material-symbols-outlined text-base">delete</span>
+                      Eliminar
+                    </button>
+                  </div>,
+                  document.body
+                )}
               </div>
             </div>
           </div>
@@ -738,6 +757,13 @@ export default function Inventario() {
 }
 
 function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEditing, cancelEditing, handleImageUpload, getStockColor, mobile }) {
+  const caractRef = useRef(null);
+  useEffect(() => {
+    if (editing && caractRef.current) {
+      caractRef.current.style.height = "auto";
+      caractRef.current.style.height = caractRef.current.scrollHeight + "px";
+    }
+  }, [editing, draft.caracteristicas]);
   return (
     <div className={`w-full ${mobile ? "" : "@md:w-[420px]"} bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden`}>
       {!mobile && (
@@ -847,6 +873,7 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
         <div className="pt-3 border-t border-outline-variant">
           <h4 className="text-xs font-bold text-outline uppercase tracking-wider mb-3">Características</h4>
           <textarea
+            ref={caractRef}
             className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary resize-none focus:ring-2 focus:ring-secondary/20 overflow-hidden"
             rows={editing ? 1 : 3}
             readOnly={!editing}
