@@ -300,7 +300,7 @@ export default function Inventario() {
                 {menuOpenId === p.id && createPortal(
                   <div ref={menuRef} className="bg-white border border-outline-variant rounded-lg shadow-xl min-w-[140px] py-1" style={{ position: 'fixed', top: menuPos.top, right: menuPos.right, zIndex: 50 }} onClick={(e) => e.stopPropagation()}>
                     <button
-                      onClick={(e) => { e.stopPropagation(); startEditing(p); }}
+                      onClick={(e) => { e.stopPropagation(); startEditing(p); setShowMobilePanel(true); }}
                       className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
                     >
                       <span className="material-symbols-outlined text-base">edit</span>
@@ -437,7 +437,7 @@ export default function Inventario() {
                         {menuOpenId === p.id && createPortal(
                           <div ref={menuRef} className="bg-white border border-outline-variant rounded-lg shadow-xl min-w-[140px] py-1" style={{ position: 'fixed', top: menuPos.top, right: menuPos.right, zIndex: 50 }} onClick={(e) => e.stopPropagation()}>
                             <button
-                              onClick={(e) => { e.stopPropagation(); startEditing(p); }}
+                      onClick={(e) => { e.stopPropagation(); startEditing(p); }}
                               className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
                             >
                               <span className="material-symbols-outlined text-base">edit</span>
