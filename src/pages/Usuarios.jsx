@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { db } from "../utils/db";
 
 export default function Usuarios() {
@@ -6,6 +7,7 @@ export default function Usuarios() {
   const [users, setUsers] = useState(() => db.getUsers());
   const [menuOpen, setMenuOpen] = useState(null);
   const [roleTarget, setRoleTarget] = useState(null);
+  const [menuPos, setMenuPos] = useState({ top: 0, right: 0 });
   const menuRef = useRef(null);
   const timeline = db.getActivities();
 
@@ -143,47 +145,60 @@ export default function Usuarios() {
                         </span>
                       </td>
                       <td className="px-4 py-4 text-sm text-on-surface-variant whitespace-nowrap">{u.lastAccess}</td>
-                      <td className="px-4 py-4 text-right relative">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setMenuOpen(menuOpen === u.username ? null : u.username); setRoleTarget(null); }}
-                          className="p-2 opacity-0 group-hover:opacity-100 hover:bg-surface-container transition-all rounded-lg"
-                        >
-                          <span className="material-symbols-outlined text-on-surface-variant">more_vert</span>
-                        </button>
-                        {menuOpen === u.username && (
-                          <div ref={menuRef} className="absolute right-0 top-full mt-1 bg-white border border-outline-variant rounded-lg shadow-xl z-20 min-w-[180px] py-1" onClick={(e) => e.stopPropagation()}>
-                            <button
-                              onClick={() => toggleEnabled(u.username)}
-                              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-slate-50 transition-colors text-left"
-                            >
-                              <span className="material-symbols-outlined text-base">{u.enabled === false ? "check_circle" : "cancel"}</span>
-                              {u.enabled === false ? "Habilitar" : "Deshabilitar"}
-                            </button>
-                            <div className="relative">
+                      <td className="px-4 py-4 text-right">
+                        <div className="relative inline-flex">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const rect = e.currentTarget.getBoundingClientRect();
+                              setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right });
+                              setMenuOpen(menuOpen === u.username ? null : u.username);
+                              setRoleTarget(null);
+                            }}
+                            className="p-2 opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-surface-container-high transition-all rounded-lg"
+                          >
+                            <span className="material-symbols-outlined text-on-surface-variant">more_vert</span>
+                          </button>
+                          {menuOpen === u.username && createPortal(
+                            <div ref={menuRef} className="bg-white border border-outline-variant rounded-lg shadow-xl min-w-[180px] py-1" style={{ position: 'fixed', top: menuPos.top, right: menuPos.right, zIndex: 100 }} onClick={(e) => e.stopPropagation()}>
                               <button
-                                onClick={() => setRoleTarget(roleTarget === u.username ? null : u.username)}
-                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-slate-50 transition-colors text-left"
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); toggleEnabled(u.username); }}
+                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
                               >
-                                <span className="material-symbols-outlined text-base">admin_panel_settings</span>
-                                Cambiar Rol
+                                <span className="material-symbols-outlined text-base">{u.enabled === false ? "check_circle" : "cancel"}</span>
+                                {u.enabled === false ? "Habilitar" : "Deshabilitar"}
                               </button>
-                              {roleTarget === u.username && (
-                                <div className="ml-6 border-t border-outline-variant pt-1 pb-1">
-                                  {roles.filter((r) => r !== u.role).map((r) => (
-                                    <button
-                                      key={r}
-                                      onClick={() => changeRole(u.username, r)}
-                                      className="w-full flex items-center gap-2 px-4 py-1.5 text-sm text-on-surface hover:bg-slate-50 transition-colors text-left"
-                                    >
-                                      <span className={`w-2 h-2 rounded-full ${r === "Admin" ? "bg-secondary" : r === "Operador" ? "bg-[#0b1c30]" : "bg-gray-500"}`}></span>
-                                      {r}
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
+                              <div className="relative">
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); setRoleTarget(roleTarget === u.username ? null : u.username); }}
+                                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
+                                >
+                                  <span className="material-symbols-outlined text-base">admin_panel_settings</span>
+                                  Cambiar Rol
+                                </button>
+                                {roleTarget === u.username && (
+                                  <div className="ml-4 border-t border-outline-variant pt-1 pb-1">
+                                    {roles.filter((r) => r !== u.role).map((r) => (
+                                      <button
+                                        key={r}
+                                        type="button"
+                                        onClick={(e) => { e.stopPropagation(); changeRole(u.username, r); }}
+                                        className="w-full flex items-center gap-2 px-4 py-1.5 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
+                                      >
+                                        <span className={`w-2 h-2 rounded-full ${r === "Admin" ? "bg-secondary" : r === "Operador" ? "bg-[#0b1c30]" : "bg-gray-500"}`}></span>
+                                        {r}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </div>,
+                            document.body
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

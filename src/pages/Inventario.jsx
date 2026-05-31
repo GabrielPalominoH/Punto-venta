@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useLocation } from "react-router-dom";
 import { db } from "../utils/db";
 
@@ -15,6 +16,7 @@ export default function Inventario() {
     return list[0] ? { ...list[0] } : { id: -1, name: "Sin productos", brand: "-", category: "-", price: 0, stock: 0, minStock: 0, modalidad: "", caracteristicas: "", image: "" };
   });
   const [menuOpenId, setMenuOpenId] = useState(null);
+  const [menuPos, setMenuPos] = useState({ top: 0, right: 0 });
   const menuRef = useRef(null);
   const [showMobilePanel, setShowMobilePanel] = useState(false);
   const [stockModalType, setStockModalType] = useState(null);
@@ -230,7 +232,7 @@ export default function Inventario() {
                     className={`transition-all duration-200 cursor-pointer ${
                       selected.id === p.id
                         ? "bg-secondary/5 ring-2 ring-secondary/50 scale-[1.01] rounded-lg"
-                        : "hover:bg-slate-50"
+                        : "hover:bg-surface-container-low"
                     } ${p.id % 2 === 0 && selected.id !== p.id ? "bg-slate-50/50" : ""}`}
                     style={selected.id === p.id ? { transformOrigin: "left center", boxShadow: "0 0 0 2px rgba(6,182,212,0.5), 0 2px 8px rgba(6,182,212,0.12)" } : undefined}
                   >
@@ -253,32 +255,40 @@ export default function Inventario() {
                     <td className="py-4 px-4 font-bold text-primary whitespace-nowrap">S/ {p.price.toFixed(2)}</td>
                     <td className="py-4 px-4">{getStockBadge(p.stock)}</td>
                     <td className="py-4 px-4 text-center relative">
-                      <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); setMenuOpenId(menuOpenId === p.id ? null : p.id); }}
-                        className="text-outline hover:text-secondary transition-colors p-1 rounded hover:bg-slate-100"
-                        title="Acciones"
-                      >
-                        <span className="material-symbols-outlined text-lg">more_vert</span>
-                      </button>
-                      {menuOpenId === p.id && (
-                        <div ref={menuRef} className="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-white border border-outline-variant rounded-lg shadow-xl z-20 min-w-[140px] py-1">
-                          <button
-                            onClick={(e) => { e.stopPropagation(); startEditing(p); }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-slate-50 transition-colors text-left"
-                          >
-                            <span className="material-symbols-outlined text-base">edit</span>
-                            Editar
-                          </button>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); deleteProduct(p.id); }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 transition-colors text-left"
-                          >
-                            <span className="material-symbols-outlined text-base">delete</span>
-                            Eliminar
-                          </button>
-                        </div>
-                      )}
+                      <div className="relative inline-flex">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right });
+                            setMenuOpenId(menuOpenId === p.id ? null : p.id);
+                          }}
+                          className="text-outline hover:text-secondary transition-colors p-1 rounded hover:bg-surface-container-high"
+                          title="Acciones"
+                        >
+                          <span className="material-symbols-outlined text-lg">more_vert</span>
+                        </button>
+                        {menuOpenId === p.id && createPortal(
+                          <div ref={menuRef} className="bg-white border border-outline-variant rounded-lg shadow-xl min-w-[140px] py-1" style={{ position: 'fixed', top: menuPos.top, right: menuPos.right, zIndex: 50 }} onClick={(e) => e.stopPropagation()}>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); startEditing(p); }}
+                              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
+                            >
+                              <span className="material-symbols-outlined text-base">edit</span>
+                              Editar
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); deleteProduct(p.id); }}
+                              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-error/10 transition-colors text-left"
+                            >
+                              <span className="material-symbols-outlined text-base">delete</span>
+                              Eliminar
+                            </button>
+                          </div>,
+                          document.body
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
