@@ -519,7 +519,7 @@ export default function Inventario() {
                 </button>
               </div>
             </div>
-            <div className="p-4">
+            <div className="p-4 flex flex-col items-center pl-5">
               <DetailPanel
                 selected={selected}
                 editing={editing}
@@ -779,7 +779,7 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
     }
   }, [editing, draft.caracteristicas]);
   return (
-    <div className={`w-full ${mobile ? "" : "@md:w-[420px]"} bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden`}>
+    <div className={`w-full max-w-md ${mobile ? "" : "@md:w-[420px]"} bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden`}>
       {!mobile && (
         <div className="p-4 border-b border-outline-variant flex items-center justify-between">
           <h3 className="font-semibold text-lg text-primary">Detalles del Producto</h3>
