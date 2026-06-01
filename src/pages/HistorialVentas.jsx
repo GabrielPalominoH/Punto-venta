@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useCallback } from "react";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { db } from "../utils/db";
+import Combobox from "../components/Combobox";
 
 const paymentLabels = {
   cash: { label: "Efectivo", icon: "payments", color: "text-green-600" },
@@ -180,19 +181,16 @@ export default function HistorialVentas() {
               <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
                 MÉTODO DE PAGO
               </label>
-              <div className="relative">
-                <select
-                  value={filterMethod}
-                  onChange={(e) => { setFilterMethod(e.target.value); setPage(1); }}
-                  className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg text-sm py-2.5 pl-3 pr-10 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all appearance-none cursor-pointer"
-                >
-                  <option value="all">Todos los métodos</option>
-                  {Object.entries(paymentLabels).map(([k, v]) => (
-                    <option key={k} value={k}>{v.label}</option>
-                  ))}
-                </select>
-                <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">expand_more</span>
-              </div>
+              <Combobox
+                value={filterMethod === "all" ? "Todos los métodos" : paymentLabels[filterMethod]?.label || "Todos los métodos"}
+                onChange={(v) => {
+                  const found = Object.entries(paymentLabels).find(([, o]) => o.label === v);
+                  setFilterMethod(found ? found[0] : "all");
+                  setPage(1);
+                }}
+                options={["Todos los métodos", ...Object.values(paymentLabels).map((o) => o.label)]}
+                placeholder="Todos los métodos"
+              />
             </div>
             <div className="space-y-1 sm:col-span-2">
               <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
