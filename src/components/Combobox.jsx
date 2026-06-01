@@ -59,7 +59,7 @@ export default function Combobox({ value, onChange, options, placeholder = "Sele
         type="button"
         disabled={disabled}
         onClick={() => { keyboardRef.current = false; if (!disabled) setOpen((p) => !p); }}
-        className={`w-full flex items-center justify-between gap-2 bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 pl-3 pr-3 text-sm transition-all ${
+        className={`w-full flex items-center justify-between gap-2 bg-surface-container-lowest border border-outline-variant rounded-lg py-2 pl-3 pr-3 text-sm transition-all ${
           !disabled ? "cursor-pointer hover:border-secondary/40 focus:ring-2 focus:ring-secondary/20 focus:border-secondary" : "opacity-50 cursor-not-allowed"
         } ${value ? "text-primary" : "text-on-surface-variant"}`}
       >
