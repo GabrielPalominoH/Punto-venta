@@ -5,6 +5,7 @@ export default function Combobox({ value, onChange, options, placeholder = "Sele
   const [focusIdx, setFocusIdx] = useState(-1);
   const ref = useRef(null);
   const listRef = useRef(null);
+  const keyboardRef = useRef(false);
 
   useEffect(() => {
     const handler = (e) => {
@@ -22,7 +23,7 @@ export default function Combobox({ value, onChange, options, placeholder = "Sele
   }, [open, options, value]);
 
   useEffect(() => {
-    if (!listRef.current || focusIdx < 0) return;
+    if (!keyboardRef.current || !listRef.current || focusIdx < 0) return;
     const el = listRef.current.children[focusIdx];
     if (el) el.scrollIntoView({ block: "nearest" });
   }, [focusIdx]);
@@ -36,11 +37,13 @@ export default function Combobox({ value, onChange, options, placeholder = "Sele
     if (e.key === "Escape") { setOpen(false); return }
     if (e.key === "ArrowDown") {
       e.preventDefault();
+      keyboardRef.current = true;
       if (!open) { setOpen(true); setFocusIdx(0); return }
       setFocusIdx((prev) => (prev < options.length - 1 ? prev + 1 : 0));
     }
     if (e.key === "ArrowUp") {
       e.preventDefault();
+      keyboardRef.current = true;
       if (!open) { setOpen(true); setFocusIdx(options.length - 1); return }
       setFocusIdx((prev) => (prev > 0 ? prev - 1 : options.length - 1));
     }
@@ -55,7 +58,7 @@ export default function Combobox({ value, onChange, options, placeholder = "Sele
       <button
         type="button"
         disabled={disabled}
-        onClick={() => !disabled && setOpen((p) => !p)}
+        onClick={() => { keyboardRef.current = false; if (!disabled) setOpen((p) => !p); }}
         className={`w-full flex items-center justify-between gap-2 bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 pl-3 pr-3 text-sm transition-all ${
           !disabled ? "cursor-pointer hover:border-secondary/40 focus:ring-2 focus:ring-secondary/20 focus:border-secondary" : "opacity-50 cursor-not-allowed"
         } ${value ? "text-primary" : "text-on-surface-variant"}`}
@@ -76,7 +79,7 @@ export default function Combobox({ value, onChange, options, placeholder = "Sele
                 key={opt}
                 type="button"
                 onClick={() => select(opt)}
-                onMouseEnter={() => setFocusIdx(i)}
+                onMouseEnter={() => { keyboardRef.current = false; setFocusIdx(i); }}
                 className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center gap-2 ${
                   opt === value
                     ? "bg-secondary/10 text-secondary font-bold"
