@@ -22,7 +22,18 @@ export default function Inventario() {
   const [stockModalType, setStockModalType] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [search, setSearch] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
+  const [animateIn, setAnimateIn] = useState(false);
+
+  useEffect(() => {
+    if (showMobilePanel) {
+      requestAnimationFrame(() => setAnimateIn(true));
+    } else {
+      setAnimateIn(false);
+    }
+  }, [showMobilePanel]);
 
   useEffect(() => {
     if (highlightedId && !stockModalType) {
@@ -155,7 +166,6 @@ export default function Inventario() {
   };
 
   const deleteProduct = (id) => {
-    if (!window.confirm("¿Estás seguro de eliminar este producto?")) return;
     const target = products.find((p) => p.id === id);
     setProducts((prev) => {
       const next = prev.filter((p) => p.id !== id);
@@ -430,7 +440,7 @@ export default function Inventario() {
                               Editar
                             </button>
                             <button
-                              onClick={(e) => { e.stopPropagation(); deleteProduct(p.id); }}
+                              onClick={(e) => { e.stopPropagation(); setDeleteTargetId(p.id); setShowDeleteModal(true); }}
                               className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-error/10 transition-colors text-left"
                             >
                               <span className="material-symbols-outlined text-base">delete</span>
@@ -485,16 +495,17 @@ export default function Inventario() {
             cancelEditing={cancelEditing}
             handleImageUpload={handleImageUpload}
             getStockColor={getStockColor}
-            deleteProduct={deleteProduct}
+            setDeleteTargetId={setDeleteTargetId}
+            setShowDeleteModal={setShowDeleteModal}
           />
         </div>
       </div>
 
       {/* Mobile detail panel (bottom sheet) — uses viewport lg since it's fixed overlay */}
       {showMobilePanel && (
-        <div className="fixed inset-0 z-50 flex items-end lg:hidden">
-          <div className="fixed inset-0 bg-black/30" onClick={() => setShowMobilePanel(false)} />
-          <div className="relative bg-white rounded-t-2xl shadow-xl w-full max-h-[80vh] overflow-y-auto pb-6">
+        <div className={`fixed inset-0 z-50 flex items-end lg:hidden transition-opacity duration-300 ${animateIn ? "opacity-100" : "opacity-0"}`}>
+          <div className={`fixed inset-0 bg-black/30 transition-opacity duration-300 ${animateIn ? "opacity-100" : "opacity-0"}`} onClick={() => setShowMobilePanel(false)} />
+          <div className={`relative bg-white rounded-t-2xl shadow-xl w-full max-h-[80vh] overflow-y-auto pb-6 transition-transform duration-300 ease-out ${animateIn ? "translate-y-0" : "translate-y-full"}`}>
             <div className="sticky top-0 bg-white pt-4 pb-2 px-4 border-b border-outline-variant flex items-center justify-between rounded-t-2xl z-10">
               <h3 className="font-semibold text-lg text-primary">Detalles del Producto</h3>
               <div className="flex items-center gap-1">
@@ -519,7 +530,8 @@ export default function Inventario() {
                 cancelEditing={cancelEditing}
                 handleImageUpload={handleImageUpload}
                 getStockColor={getStockColor}
-                deleteProduct={deleteProduct}
+                setDeleteTargetId={setDeleteTargetId}
+                setShowDeleteModal={setShowDeleteModal}
                 mobile
               />
             </div>
@@ -730,11 +742,35 @@ export default function Inventario() {
           </div>
         </div>
       )}
+
+      {/* Delete confirmation modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowDeleteModal(false)}>
+          <div className="bg-surface-container-lowest w-full max-w-sm rounded-xl border border-outline-variant shadow-xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 text-center">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-error/10 flex items-center justify-center">
+                <span className="material-symbols-outlined text-3xl text-error">delete</span>
+              </div>
+              <h3 className="font-bold text-lg text-primary mb-2">Eliminar Producto</h3>
+              <p className="text-sm text-on-surface-variant">¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.</p>
+            </div>
+            <div className="p-4 border-t border-outline-variant flex justify-end gap-3 bg-surface-bright">
+              <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant text-sm font-bold hover:bg-surface-container-low transition-colors">
+                Cancelar
+              </button>
+              <button onClick={() => { deleteProduct(deleteTargetId); setShowDeleteModal(false); setShowMobilePanel(false); }} className="px-4 py-2 rounded-lg bg-error text-on-error text-sm font-bold hover:opacity-90 transition-colors flex items-center gap-2">
+                <span className="material-symbols-outlined text-base">delete</span>
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEditing, cancelEditing, handleImageUpload, getStockColor, deleteProduct, mobile }) {
+function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEditing, cancelEditing, handleImageUpload, getStockColor, setDeleteTargetId, setShowDeleteModal, mobile }) {
   const caractRef = useRef(null);
   useEffect(() => {
     if (editing && caractRef.current) {
@@ -914,7 +950,7 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
             </div>
           </div>
         </div>
-        <button type="button" onClick={() => deleteProduct(selected.id)} className="w-full bg-error/10 text-error py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-error/20 transition-all mt-2">
+        <button type="button" onClick={() => { setDeleteTargetId(selected.id); setShowDeleteModal(true); }} className="w-full bg-error/10 text-error py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-error/20 transition-all mt-2">
           <span className="material-symbols-outlined">delete</span>
         </button>
       </form>

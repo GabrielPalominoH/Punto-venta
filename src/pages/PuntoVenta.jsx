@@ -31,12 +31,10 @@ export default function PuntoVenta() {
   const [cart, setCart] = useState([]);
   const [activeCat, setActiveCat] = useState("TODOS");
   const [search, setSearch] = useState(() => searchParams.get("q") || "");
-  const [barcode, setBarcode] = useState("");
   const [customer, setCustomer] = useState("");
   const [payment, setPayment] = useState(null);
   const [showReceipt, setShowReceipt] = useState(false);
   const [lastSale, setLastSale] = useState(null);
-  const barcodeRef = useRef(null);
   const [showMobileCart, setShowMobileCart] = useState(false);
 
   useEffect(() => {
@@ -72,17 +70,6 @@ export default function PuntoVenta() {
   useEffect(() => {
     if (showReceipt) setShowMobileCart(false);
   }, [showReceipt]);
-
-  useEffect(() => {
-    if (barcode.length >= 6) {
-      const found = products.find(
-        (p) => p.code.toLowerCase() === barcode.toLowerCase()
-      );
-      if (found && found.stock > 0) addToCart(found);
-      setBarcode("");
-      if (barcodeRef.current) barcodeRef.current.focus();
-    }
-  }, [barcode]);
 
   const getStock = (id) => {
     const p = products.find((x) => x.id === id);
@@ -241,18 +228,6 @@ export default function PuntoVenta() {
                 placeholder="Buscar productos por nombre o código..."
               />
             </div>
-            <div className="flex w-full sm:w-auto items-center gap-2 bg-white border border-outline-variant px-4 py-2 rounded-lg shrink-0">
-              <span className="material-symbols-outlined text-secondary text-lg">
-                barcode_scanner
-              </span>
-              <input
-                ref={barcodeRef}
-                value={barcode}
-                onChange={(e) => setBarcode(e.target.value)}
-                className="min-w-0 flex-1 bg-transparent border-none p-0 text-sm focus:ring-0 sm:w-28 outline-none"
-                placeholder="Escanear"
-              />
-            </div>
           </div>
 
           <div className="pos-categories -mx-6 px-6 lg:mx-0 lg:px-0 flex items-center gap-3 lg:gap-2 overflow-x-auto scrollbar-hide">
@@ -271,7 +246,7 @@ export default function PuntoVenta() {
             ))}
           </div>
 
-          <div className="pos-products grid grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3 lg:gap-6">
+          <div className="pos-products grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
             {filtered.map((p) => {
               const inCart = getCartQty(p.id);
               const soldOut = p.stock === 0;
@@ -284,7 +259,7 @@ export default function PuntoVenta() {
                       : "border-outline-variant hover:shadow-lg"
                   }`}
                 >
-                  <div className="max-lg:aspect-square lg:h-44 overflow-hidden relative bg-surface-container-high flex items-center justify-center">
+                  <div className="max-lg:aspect-square lg:h-52 overflow-hidden relative bg-surface-container-high flex items-center justify-center">
                     {p.image && (p.image.startsWith("http") || p.image.startsWith("data:")) ? (
                       <img
                         src={p.image}
@@ -327,7 +302,7 @@ export default function PuntoVenta() {
                       </div>
                     )}
                   </div>
-                  <div className="p-3 lg:p-4 flex flex-col flex-grow space-y-1 lg:space-y-2">
+                  <div className="p-3 lg:p-5 flex flex-col flex-grow space-y-1 lg:space-y-2">
                     <div className="max-lg:hidden flex items-center justify-between">
                       <p className="text-xs font-bold text-secondary uppercase tracking-wider">
                         {p.category}
@@ -336,12 +311,12 @@ export default function PuntoVenta() {
                         {p.code}
                       </span>
                     </div>
-                    <h3 className="font-semibold text-base min-[380px]:text-lg text-on-surface leading-6 min-[380px]:leading-7 line-clamp-2 mb-1">
+                    <h3 className="font-semibold text-base min-[380px]:text-lg lg:text-sm text-on-surface leading-6 min-[380px]:leading-7 lg:leading-5 line-clamp-2 mb-1">
                       {p.name}
                     </h3>
                     <div className="mt-auto flex items-center justify-between gap-2">
                       <span className="max-lg:hidden"><StockBadge stock={p.stock} /></span>
-                      <span className="text-secondary font-bold text-base min-[380px]:text-lg leading-tight">S/ {formatPrice(p.price)}</span>
+                      <span className="lg:hidden text-secondary font-bold text-base min-[380px]:text-lg leading-tight">S/ {formatPrice(p.price)}</span>
                       {soldOut ? (
                         <span className="text-xs text-on-surface-variant italic max-lg:hidden">No disponible</span>
                       ) : (
