@@ -617,16 +617,19 @@ export default function Inventario() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-outline uppercase">Categoría</label>
-                  <select
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
-                    value={newProduct.category}
-                    onChange={(e) => updateNewProduct("category", e.target.value)}
-                  >
-                    <option value="">Seleccionar categoría</option>
-                    {db.getCategories().map((cat) => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 pl-3 pr-10 text-sm text-primary focus:ring-2 focus:ring-secondary/20 transition-all appearance-none cursor-pointer"
+                      value={newProduct.category}
+                      onChange={(e) => updateNewProduct("category", e.target.value)}
+                    >
+                      <option value="">Seleccionar categoría</option>
+                      {db.getCategories().map((cat) => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">expand_more</span>
+                  </div>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -668,16 +671,22 @@ export default function Inventario() {
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-bold text-outline uppercase">Modalidad de Caña</label>
-                <select
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
-                  value={newProduct.modalidad}
-                  onChange={(e) => updateNewProduct("modalidad", e.target.value)}
-                >
-                  <option value="Spinning">Spinning</option>
-                  <option value="Surfcasting">Surfcasting</option>
-                  <option value="Jigging">Jigging</option>
-                  <option value="Spinning ligero">Spinning ligero</option>
-                </select>
+                <div className="relative">
+                  <select
+                    className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 pl-3 pr-10 text-sm text-primary focus:ring-2 focus:ring-secondary/20 transition-all appearance-none cursor-pointer"
+                    value={newProduct.modalidad}
+                    onChange={(e) => updateNewProduct("modalidad", e.target.value)}
+                  >
+                    <option value="Spinning">Spinning</option>
+                    <option value="Surfcasting">Surfcasting</option>
+                    <option value="Jigging">Jigging</option>
+                    <option value="Spinning ligero">Spinning ligero</option>
+                    <option value="Baitcasting">Baitcasting</option>
+                    <option value="Trolling">Trolling</option>
+                    <option value="Flying">Flying</option>
+                  </select>
+                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">expand_more</span>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -852,16 +861,19 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
           <div className="space-y-1">
             <label className="text-xs font-bold text-outline uppercase">Categoría</label>
             {editing ? (
-              <select
-                className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
-                value={draft.category}
-                onChange={(e) => updateDraft("category", e.target.value)}
-              >
-                <option value="">Seleccionar categoría</option>
-                {db.getCategories().map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 pl-3 pr-10 text-sm text-primary focus:ring-2 focus:ring-secondary/20 transition-all appearance-none cursor-pointer"
+                  value={draft.category}
+                  onChange={(e) => updateDraft("category", e.target.value)}
+                >
+                  <option value="">Seleccionar categoría</option>
+                  {db.getCategories().map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">expand_more</span>
+              </div>
             ) : (
               <p className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary">{selected.category}</p>
             )}
@@ -896,17 +908,20 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
         </div>
         <div className="space-y-1">
           <label className="text-xs font-bold text-outline uppercase">Modalidad de Caña</label>
-          <select
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
-            disabled={!editing}
-            value={editing ? draft.modalidad || "" : selected.modalidad || ""}
-            onChange={(e) => updateDraft("modalidad", e.target.value)}
-          >
-            <option value="Spinning">Spinning</option>
-            <option value="Surfcasting">Surfcasting</option>
-            <option value="Jigging">Jigging</option>
-            <option value="Spinning ligero">Spinning ligero</option>
-          </select>
+          <div className="relative">
+            <select
+              className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 pl-3 pr-10 text-sm text-primary focus:ring-2 focus:ring-secondary/20 transition-all appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!editing}
+              value={editing ? draft.modalidad || "" : selected.modalidad || ""}
+              onChange={(e) => updateDraft("modalidad", e.target.value)}
+            >
+              <option value="Spinning">Spinning</option>
+              <option value="Surfcasting">Surfcasting</option>
+              <option value="Jigging">Jigging</option>
+              <option value="Spinning ligero">Spinning ligero</option>
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">expand_more</span>
+          </div>
         </div>
         <div className="pt-3 border-t border-outline-variant">
           <h4 className="text-xs font-bold text-outline uppercase tracking-wider mb-3">Logística</h4>

@@ -1,0 +1,274 @@
+<!DOCTYPE html><html class="light" lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dcd9db",
+                        "on-surface-variant": "#45464d",
+                        "inverse-surface": "#303032",
+                        "outline-variant": "#c6c6cd",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#000000",
+                        "primary-container": "#131b2e",
+                        "tertiary-container": "#0b1c30",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "surface-tint": "#565e74",
+                        "surface": "#fcf8fa",
+                        "surface-container": "#f0edef",
+                        "on-background": "#1b1b1d",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#d3e4fe",
+                        "tertiary": "#000000",
+                        "surface-container-high": "#eae7e9",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "surface-variant": "#e4e2e4",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#7c839b",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#1b1b1d",
+                        "on-secondary-container": "#006172",
+                        "secondary-fixed": "#acedff",
+                        "outline": "#76777d",
+                        "on-secondary-fixed": "#001f26",
+                        "inverse-primary": "#bec6e0",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "on-tertiary-container": "#75859d",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-low": "#f6f3f5",
+                        "secondary": "#00687a",
+                        "secondary-container": "#57dffe",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "on-tertiary": "#ffffff",
+                        "background": "#fcf8fa",
+                        "on-primary-fixed": "#131b2e",
+                        "primary-fixed-dim": "#bec6e0",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fcf8fa",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-container-highest": "#e4e2e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "48px",
+                        "sm": "12px",
+                        "container-max": "1440px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "sidebar-width": "260px",
+                        "lg": "32px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .tonal-layer {
+            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(248,250,252,1) 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface dark:bg-surface-container-high border-b border-outline-variant dark:border-outline flex justify-between items-center px-md py-sm">
+<div class="flex items-center gap-sm">
+<button class="p-xs active:opacity-80 transition-opacity hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-primary dark:text-on-primary">menu</span>
+</button>
+
+</div>
+
+<div class="flex items-center gap-xs">
+<button class="p-xs active:opacity-80 transition-opacity hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-primary dark:text-on-primary">notifications</span>
+</button>
+<button class="p-xs active:opacity-80 transition-opacity hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-primary dark:text-on-primary">settings</span>
+</button>
+</div></header>
+<main class="max-w-container-max mx-auto px-md pb-40">
+<!-- Category Section -->
+<section class="py-md overflow-x-auto hide-scrollbar -mx-md px-md flex items-center gap-sm">
+<button class="px-md py-xs rounded-full bg-secondary-container text-on-secondary-container font-label-caps text-label-caps whitespace-nowrap active:scale-95 transition-transform">TODOS</button>
+<button class="px-md py-xs rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-label-caps whitespace-nowrap hover:bg-outline-variant transition-colors active:scale-95 transition-transform">MOTORES</button>
+<button class="px-md py-xs rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-label-caps whitespace-nowrap hover:bg-outline-variant transition-colors active:scale-95 transition-transform">ELECTRÓNICA</button>
+<button class="px-md py-xs rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-label-caps whitespace-nowrap hover:bg-outline-variant transition-colors active:scale-95 transition-transform">EQUIPAMIENTO</button>
+</section>
+<!-- Product Grid -->
+<div class="grid grid-cols-2 gap-sm lg:grid-cols-4 lg:gap-md">
+<!-- Product 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-lg">
+<div class="aspect-square relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A professional high-performance Mercury 5HP FourStroke outboard boat motor displayed in a clean, high-key studio environment. The lighting is crisp and modern, reflecting a premium retail setting for nautical equipment. The color palette is dominated by deep blacks and cool grays, aligning with the Marlin Poseidon professional corporate aesthetic. The mood is reliable and high-end." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEeadTIbmxvFh29bPRHFP7G4RPTFEOkcA4WgaFhTgzXouYKb6kTK-2UOTODPh9e7iW3DMsPnP-S2wOuauQYkD5-T8MCttMnPqTKLdUJrhH2O4ZiHXAdrxu_J3vgA_MN89cnhGtyw6jVZdN7YQVGkAKh70h3UYfO4dggpIPU9P7LepdPY0A8Fz8Hi2jI-Kq3O1roThhh7Z88xMFRFJ0GP5EodCqM6jNANkIrlGei2806ojBXXKqq1mm-TG1KjD3faBdUEiRmkruZis">
+<span class="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-secondary-container/90 text-on-secondary-container text-[10px] font-bold">IN STOCK</span>
+</div>
+<div class="p-sm flex flex-col flex-grow">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-1 line-clamp-2">Mercury 5HP FourStroke</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="text-secondary font-bold text-title-sm">S/ 4,250.00</span>
+<button class="w-8 h-8 rounded-lg bg-secondary text-on-secondary flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-lg">
+<div class="aspect-square relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A modern Garmin Striker Vivid 7cv fishfinder display showing vibrant sonar data on a crisp digital screen. The device is showcased in a minimalist professional nautical retail environment with soft, bright light-mode illumination. The visual style is technical and precise, featuring a clean teal and slate color palette typical of high-end maritime navigation enterprise software. The scene feels sophisticated and functional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuHzMfKxW8G4EYgabCAlo7h9YtM73n1n4phiegiyGn8FEZ3Iulqdr_CLmhsryLzJss2RnytrAfhOP5UYoSZlbuS-p01jlpVouU6Z2vdtphqzAw1RvrlcXfIMHsoMaLvgFarve5JShK7WsmcAOaCDgZpTxBA0iAxVWqms5MuIO4CJ0GV2M2xQtKYf7qZM7x3pF8b8qiwL09_XmsBigSymR79gTnx7Dow6cbeD6ruGJqOCmasySzcJ2MqcZ8BajCu9ssEXbu8TmR-no">
+</div>
+<div class="p-sm flex flex-col flex-grow">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-1 line-clamp-2">Garmin Striker Vivid 7cv</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="text-secondary font-bold text-title-sm">S/ 1,800.00</span>
+<button class="w-8 h-8 rounded-lg bg-secondary text-on-secondary flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-lg">
+<div class="aspect-square relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A heavy-duty marine anchor and chain resting on a weathered wooden dock under the bright midday sun. The image has a clean, airy feel with high-contrast lighting that emphasizes the rugged durability of the nautical equipment. The color palette incorporates cool blues and natural textures, creating a sense of reliability and professional maritime utility for the Marlin Poseidon brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXbO3wixFvf4hpAt6Ex6fOxiVUztoVdvXDv1wG7Q59i7bMZ4xWd9RacvF18jSdOsEB3OD3t3HbAqSHiz5ETWCyHZl35vygWyG-vXwAsCuJU_1b9AqPmXn0N_n0jqXyOrMZJL18VCA1m8_Zui_dtqTcpTmmUn2Zd8f-t0AYB7Dk0_Sdm36ABkfl3QUyvLqdkr-imyI82-00SeWlCH1peK6EbfJj25cAaBsGrOp7LJqx4wBP_8SzAA8Haxv39L4AlYV-DxqEyTWN0NM">
+<span class="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-on-tertiary-fixed-variant/10 text-on-tertiary-fixed-variant text-[10px] font-bold">LOW STOCK</span>
+</div>
+<div class="p-sm flex flex-col flex-grow">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-1 line-clamp-2">Ancla Delta Galv. 10kg</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="text-secondary font-bold text-title-sm">S/ 850.00</span>
+<button class="w-8 h-8 rounded-lg bg-secondary text-on-secondary flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-lg">
+<div class="aspect-square relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A professional-grade nautical life jacket vest hanging against a pristine white wall in a modern maritime equipment shop. The lighting is diffused and even, creating a clean light-mode atmosphere. The vest is vibrant orange with high-contrast reflective strips, symbolizing safety and maritime professionalism. The overall aesthetic is geometric, orderly, and reflects the trustworthy nature of Marlin Poseidon supplies." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWFFIvZOSBpjdmHemyVsfaEYLfO_moBFWw2lBf72QU5-XmGpgZbFArfJxN5pHGrt34MkxZrZv7Hk8VV4AshPxIMUKLm3l0nsGcA9XpiXy8t7Cg8KtaUC1ay_Ua45B3f1uypNc1A6bRNwbphy4hI9A0U-rVk2KBJHbDG8NCnlsylLVYKdspyBMvmkUStqj0m1LVyU05dSSqrvi5QBLy-qWRQE7cgrxq54NdSPyy1Y88Lx06bcWSWkCTDF-3C_zYteryOnHqF2S1sCw">
+</div>
+<div class="p-sm flex flex-col flex-grow">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-1 line-clamp-2">Chaleco Salvavida Pro-X</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="text-secondary font-bold text-title-sm">S/ 320.00</span>
+<button class="w-8 h-8 rounded-lg bg-secondary text-on-secondary flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 5 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-lg">
+<div class="aspect-square relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A selection of high-quality nautical ropes and stainless steel boat cleats arranged on a slate-colored table. The photography is professional and sharp, with a focus on material textures and precision manufacturing. The lighting is bright and modern, creating a spacious and premium enterprise feel. The palette is a mix of metallic silver and deep sea blues, conveying strength and maritime utility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKH08s1XuqH6AGNfmr4lViW9aNd-LpUybvtZhm06VX3sundhmxRiuz0j_E6clr8JIUp0QetiUBZvrqAuxeASPK1XeHu7AnNey4Y0VhD7LWmWNr9Bo2idwhzJaEafKbxS3R9kM2nUxSDz3aBSw1Gorwj0ILuaASGLcuSkP1hryt6cW2wRfw1BQZR2xa1UWnyf_3eGgM5WXTahMrIz8Is0AQ1rc2NlMU-glCtHKdDHp_niNl9AP9zaMndbCg9J-CrWDAaEw6jVtIaTI">
+</div>
+<div class="p-sm flex flex-col flex-grow">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-1 line-clamp-2">Cabo Marino Trenzado 10mm (m)</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="text-secondary font-bold text-title-sm">S/ 12.00</span>
+<button class="w-8 h-8 rounded-lg bg-secondary text-on-secondary flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 6 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-lg">
+<div class="aspect-square relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A professional maritime radio communication console with a glowing digital interface, positioned in a high-tech boat cabin environment. The lighting is low but focused on the control panel, highlighting a sleek and rugged enterprise design. The visual style is sophisticated and reliable, using a color scheme of deep navy and bright teal accents for critical data visualization, consistent with modern POS systems." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAbQNd4hH-OYYKl0R-fO65Nz0NN50i9Wkg2ekB08AK19LnDEoMNhTtpLbbIcLwywmjg3wALhIND_VpFUX_ZFQlgnAq-y39oKxmCeiMeB4b7wSi6Hu17lyVBDTdFwoWF5VP9vqq3xV7ReJuq71ta3g44QoSHwNWQQqLXPcQzef-abWeOdnNCiKtQGLNtZg0JcFwww6nu4VE_IuRBCYH0vIrfqLHbz0R75En6vjXhp_i43OTY21saQJsVICRc2ai44LRd09vAbT4zqI">
+</div>
+<div class="p-sm flex flex-col flex-grow">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-1 line-clamp-2">VHF Radio Marino ICOM</h3>
+<div class="mt-auto flex items-center justify-between">
+<span class="text-secondary font-bold text-title-sm">S/ 1,150.00</span>
+<button class="w-8 h-8 rounded-lg bg-secondary text-on-secondary flex items-center justify-center active:scale-90 transition-transform shadow-sm" style="position: relative;">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Cart Summary & BottomNavBar -->
+<div class="fixed bottom-0 w-full z-50">
+<!-- Cart Summary Sticky Bar -->
+<div class="mx-md mb-sm bg-primary-container text-on-primary border border-outline-variant/30 rounded-xl px-md py-sm flex items-center justify-between shadow-lg backdrop-blur-md">
+<div class="flex items-center gap-sm">
+<div class="relative">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute -top-2 -right-2 bg-secondary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps opacity-70">TOTAL</p>
+<p class="font-title-sm text-title-sm">S/ 6,050.00</p>
+</div>
+</div>
+<button class="bg-secondary text-on-secondary px-lg py-sm rounded-lg font-title-sm flex items-center gap-xs active:scale-95 transition-transform">
+                Ver Carrito
+                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- BottomNavBar -->
+
+</div>
+<!-- Micro-interaction for add to cart -->
+<script>
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if(this.innerText.includes('add')) {
+                    const ripple = document.createElement('div');
+                    ripple.className = 'absolute inset-0 bg-white/20 rounded-lg animate-ping';
+                    this.style.position = 'relative';
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 400);
+                }
+            });
+        });
+    </script>
+
+
+</body></html>

@@ -180,16 +180,19 @@ export default function HistorialVentas() {
               <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
                 MÉTODO DE PAGO
               </label>
-              <select
-                value={filterMethod}
-                onChange={(e) => { setFilterMethod(e.target.value); setPage(1); }}
-                className="w-full bg-white border border-outline-variant rounded-lg text-sm py-2 px-3 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
-              >
-                <option value="all">Todos los métodos</option>
-                {Object.entries(paymentLabels).map(([k, v]) => (
-                  <option key={k} value={k}>{v.label}</option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={filterMethod}
+                  onChange={(e) => { setFilterMethod(e.target.value); setPage(1); }}
+                  className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg text-sm py-2.5 pl-3 pr-10 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all appearance-none cursor-pointer"
+                >
+                  <option value="all">Todos los métodos</option>
+                  {Object.entries(paymentLabels).map(([k, v]) => (
+                    <option key={k} value={k}>{v.label}</option>
+                  ))}
+                </select>
+                <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-lg">expand_more</span>
+              </div>
             </div>
             <div className="space-y-1 sm:col-span-2">
               <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
