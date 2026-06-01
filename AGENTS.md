@@ -40,3 +40,17 @@
 - Stitch design system reference files in project root (`stitch-exact.html`, `stitch-ref.html`, `stitch-ref.png`)
 - No test framework — no tests to run
 - `scrollbar-hide` utility class used for scrollable containers
+- CSS helper classes in `src/App.css` for filter panel alignment: `sales-filter-panel`, `inventory-detail-panel`, `audit-filter-panel` (keep filter controls height-consistent)
+
+## Auditoria (`/auditoria`)
+- Paginated activity log: 10 items/page with prev/next buttons, page numbers with ellipsis, and "Mostrando X–Y de Z registros"
+- Filters: text search, date range (Desde/Hasta), responsible person (Combobox with names auto-extracted from `<strong>` tags in activity text)
+- Data from `db.getActivities()` — fields: `id`, `icon`, `iconBg`, `text` (HTML), `meta`, `amount`, `amountClass`, `date` (ISO)
+- Filter changes reset to page 1 via `setPage(1)` in each onChange handler
+- Responsible names extracted via `extractPerson()` regex — takes the last `<strong>content</strong>` from `text`
+
+## Combobox (`src/components/Combobox.jsx`)
+- Replaces native `<select>` with custom dropdown, keyboard/mouse navigation, search-in options
+- Props: `value`, `onChange`, `options` (string[]), `placeholder`, `disabled`, `className`
+- Keyboard: ArrowUp/Down to navigate, Enter to select, Escape to close
+- Mouse hover highlight guarded by `keyboardRef` to avoid scroll-jump interference
