@@ -78,14 +78,6 @@ export default function Usuarios() {
 
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <section className="col-span-1 lg:col-span-8 space-y-6">
-          {users.filter((u) => !u.enabled).length > 0 && (
-            <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 flex items-center gap-2">
-              <span className="material-symbols-outlined text-rose-stock text-lg">info</span>
-              <p className="text-sm text-rose-stock font-semibold">
-                {users.filter((u) => !u.enabled).length} usuario(s) deshabilitado(s)
-              </p>
-            </div>
-          )}
           <div className="bg-white rounded-xl border border-outline-variant overflow-hidden shadow-sm">
             <div className="px-4 py-4 border-b border-outline-variant bg-surface-bright flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div className="relative w-full sm:w-auto sm:min-w-[240px]">
