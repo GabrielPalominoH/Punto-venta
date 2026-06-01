@@ -564,7 +564,7 @@ export default function Inventario() {
               {(stockModalType === "agotado" ? outOfStock : lowStock).map((p) => (
                 <div
                   key={p.id}
-                  onClick={() => { setSelected(p); setHighlightedId(p.id); setStockModalType(null); setTimeout(() => { document.getElementById(`product-row-${p.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => setHighlightedId(null), 2000); }, 100); }}
+                  onClick={() => { setSelected(p); setHighlightedId(p.id); setStockModalType(null); setTimeout(() => { document.getElementById(`product-row-${p.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => setHighlightedId(null), 2000); }, 0); }}
                   className="p-4 flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer"
                 >
                   <img
