@@ -23,6 +23,17 @@ export default function Inventario() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [search, setSearch] = useState("");
   const [highlightedId, setHighlightedId] = useState(null);
+
+  useEffect(() => {
+    if (highlightedId && !stockModalType) {
+      const id = highlightedId;
+      setTimeout(() => {
+        document.getElementById(`product-row-${id}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+      const timer = setTimeout(() => setHighlightedId(null), 2100);
+      return () => clearTimeout(timer);
+    }
+  }, [highlightedId, stockModalType]);
   const [newProduct, setNewProduct] = useState({
     name: "", brand: "", category: "", price: 0, stock: 0, minStock: 0,
     modalidad: "Spinning", caracteristicas: "", image: ""
@@ -564,7 +575,7 @@ export default function Inventario() {
               {(stockModalType === "agotado" ? outOfStock : lowStock).map((p) => (
                 <div
                   key={p.id}
-                  onClick={() => { setSelected(p); setHighlightedId(p.id); setStockModalType(null); setTimeout(() => { document.getElementById(`product-row-${p.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => setHighlightedId(null), 2000); }, 0); }}
+                  onClick={() => { setSelected(p); setHighlightedId(p.id); setStockModalType(null); }}
                   className="p-4 flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer"
                 >
                   <img
