@@ -1,4 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 import { db } from "../utils/db";
 
 const paymentLabels = {
@@ -16,6 +18,42 @@ export default function HistorialVentas() {
   const [detailSale, setDetailSale] = useState(null);
   const [page, setPage] = useState(1);
   const perPage = 10;
+  const pdfRef = useRef(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
+
+  const downloadPDF = useCallback(async () => {
+    if (!detailSale) return;
+    setPdfLoading(true);
+    try {
+      const el = pdfRef.current;
+      if (!el) return;
+      el.style.display = "block";
+      await new Promise((r) => setTimeout(r, 100));
+      const canvas = await html2canvas(el, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        logging: false,
+      });
+      el.style.display = "none";
+      const imgData = canvas.toDataURL("image/png");
+      const doc = new jsPDF({ unit: "mm", format: "a4" });
+      const pw = 210;
+      const ph = (canvas.height / canvas.width) * pw;
+      doc.addImage(imgData, "PNG", 0, 0, pw, ph, undefined, "FAST");
+      if (ph > 297) {
+        let top = 297;
+        while (top < ph) {
+          doc.addPage();
+          doc.addImage(imgData, "PNG", 0, -top, pw, ph, undefined, "FAST");
+          top += 297;
+        }
+      }
+      doc.save(`${detailSale.id}.pdf`);
+    } catch (e) {
+      console.error("PDF error:", e);
+    }
+    setPdfLoading(false);
+  }, [detailSale]);
 
   const todayStr = new Date().toLocaleDateString("es-PE");
 
@@ -306,79 +344,213 @@ export default function HistorialVentas() {
       </section>
 
       {detailSale && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm overflow-y-auto py-4 sm:py-8" onClick={() => setDetailSale(null)}>
-          <div className="animate-[scaleIn_0.2s_ease-out] w-full max-w-[520px] mx-3 sm:mx-4" onClick={(e) => e.stopPropagation()}>
-            <div className="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-xl">
-              <div className="p-4 sm:p-6 border-b border-outline-variant flex items-center justify-between bg-surface-container-low">
-                <div>
-                  <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">DETALLE DE VENTA</span>
-                  <h3 className="text-lg font-bold text-primary mt-1">{detailSale.id}</h3>
+        <>
+          <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm overflow-y-auto py-4 sm:py-8" onClick={() => setDetailSale(null)}>
+            <div className="animate-[scaleIn_0.2s_ease-out] w-full max-w-[500px] mx-3 sm:mx-4" onClick={(e) => e.stopPropagation()}>
+              <div className="bg-white border border-[#c6c6cd] shadow-sm rounded-xl overflow-hidden" data-keep-white={true}>
+                <div className="p-4 sm:p-6 border-b border-[#c6c6cd] bg-[#fcf8fa] flex flex-col sm:flex-row justify-between items-start gap-4">
+                  <div className="flex flex-col">
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: "#00687a", textTransform: "uppercase" }}>Documento Electrónico</span>
+                    <h2 style={{ fontFamily: "Inter, sans-serif", fontSize: 24, fontWeight: 600, letterSpacing: "-0.01em", color: "#000", marginTop: 4 }}>
+                      Boleta de Venta
+                    </h2>
+                    <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#45464d", marginTop: 2 }}>R.U.C. 20601234567</p>
+                  </div>
+                  <div style={{ background: "#57dffe", border: "1px solid rgba(0,104,122,0.2)", borderRadius: 8, padding: "12px 20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: "#006172" }}>NÚMERO DE BOLETA</span>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: 20, fontWeight: 600, color: "#001f26", marginTop: 2 }}>{detailSale.id}</span>
+                  </div>
                 </div>
+
+                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-[#c6c6cd]">
+                  <div className="space-y-2">
+                    <h3 style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", textTransform: "uppercase" }}>Datos del Cliente</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#00687a" }}>person</span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 18, fontWeight: 600, color: "#1b1b1d" }}>{detailSale.customer || "Consumidor Final"}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#00687a" }}>payments</span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#45464d" }}>{paymentLabels[detailSale.payment]?.label || "Efectivo"}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-right">
+                    <h3 style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", textTransform: "uppercase" }}>Fecha de Emisión</h3>
+                    <div className="flex items-center gap-2 justify-end">
+                      <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#00687a" }}>calendar_today</span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 18, fontWeight: 600, color: "#1b1b1d" }}>
+                        {(() => { const p = detailSale.date?.split(", ") || []; return p[0] || detailSale.date })()}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 justify-end">
+                      <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#76777d" }}>schedule</span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#45464d" }}>
+                        {(() => { const p = detailSale.date?.split(", ") || []; return p[1] || "" })()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr style={{ background: "#f0edef" }}>
+                        <th className="px-4 py-2" style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", borderBottom: "1px solid #c6c6cd" }}>Descripción</th>
+                        <th className="px-4 py-2 text-center" style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", borderBottom: "1px solid #c6c6cd" }}>Cant.</th>
+                        <th className="px-4 py-2 text-right" style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", borderBottom: "1px solid #c6c6cd" }}>Unitario</th>
+                        <th className="px-4 py-2 text-right" style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", borderBottom: "1px solid #c6c6cd" }}>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody style={{ borderBottom: "1px solid #c6c6cd" }}>
+                      {detailSale.items?.map((item, i) => (
+                        <tr key={i} className="hover:bg-[#f6f3f5]" style={i % 2 ? { background: "#f6f3f5" } : {}}>
+                          <td className="px-4 py-3">
+                            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 16, fontWeight: 600, color: "#1b1b1d" }}>{item.name}</p>
+                          </td>
+                          <td className="px-4 py-3 text-center" style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#1b1b1d" }}>{item.qty}</td>
+                          <td className="px-4 py-3 text-right" style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#1b1b1d" }}>S/ {formatPrice(item.price)}</td>
+                          <td className="px-4 py-3 text-right" style={{ fontFamily: "Inter, sans-serif", fontSize: 16, fontWeight: 600, color: "#00687a" }}>S/ {formatPrice(item.price * item.qty)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="p-6 bg-[#fcf8fa] flex justify-end border-t border-[#c6c6cd]">
+                  <div style={{ width: 300 }} className="space-y-2">
+                    <div className="flex justify-between items-center py-1">
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#45464d" }}>Subtotal</span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#1b1b1d" }}>S/ {formatPrice(detailSale.total)}</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-t border-[#c6c6cd]">
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 18, fontWeight: 700, color: "#000", textTransform: "uppercase", letterSpacing: "-0.01em" }}>Total a Pagar</span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontSize: 24, fontWeight: 700, color: "#00687a" }}>S/ {formatPrice(detailSale.total)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 text-center border-t border-[#c6c6cd] bg-white space-y-2" data-keep-white={true}>
+                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: 20, fontWeight: 700, color: "#00687a", fontStyle: "italic" }}>¡Gracias por su compra!</p>
+                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#76777d" }}>Marlin Poseidon - Expertos en Pesca Deportiva &amp; Tackle Profesional</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-4">
                 <button
                   onClick={() => setDetailSale(null)}
-                  className="p-2 hover:bg-surface-container-high rounded-lg transition-colors"
-                >
-                  <span className="material-symbols-outlined text-on-surface-variant">close</span>
-                </button>
-              </div>
-              <div className="p-4 sm:p-6 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">CLIENTE</span>
-                    <p className="text-sm font-semibold text-primary mt-1">{detailSale.customer || "Consumidor Final"}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">FECHA</span>
-                    <p className="text-sm font-semibold text-primary mt-1">{detailSale.date}</p>
-                  </div>
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">MÉTODO DE PAGO</span>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className={`material-symbols-outlined ${paymentLabels[detailSale.payment]?.color || "text-green-600"}`}>
-                      {paymentLabels[detailSale.payment]?.icon || "payments"}
-                    </span>
-                    <span className="text-sm font-semibold">
-                      {paymentLabels[detailSale.payment]?.label || "Efectivo"}
-                    </span>
-                  </div>
-                </div>
-                <div className="border-t border-outline-variant pt-4">
-                  <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">PRODUCTOS</span>
-                  <div className="mt-2 space-y-2">
-                    {detailSale.items?.map((item, i) => (
-                      <div key={i} className="flex items-center justify-between py-2 border-b border-outline-variant/50 last:border-b-0">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="w-6 h-6 rounded-full bg-secondary/10 text-secondary flex items-center justify-center text-xs font-bold shrink-0">
-                            {item.qty}
-                          </span>
-                          <span className="text-sm font-medium text-primary truncate">{item.name}</span>
-                        </div>
-                        <span className="text-sm font-semibold text-secondary shrink-0 ml-2">
-                          S/ {formatPrice(item.price * item.qty)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="border-t border-outline-variant pt-4 flex justify-between items-center">
-                  <span className="text-base font-bold text-primary">TOTAL</span>
-                  <span className="text-xl font-bold text-secondary">
-                    S/ {formatPrice(detailSale.total)}
-                  </span>
-                </div>
-              </div>
-              <div className="p-4 border-t border-outline-variant bg-surface-container-low flex gap-3">
-                <button
-                  onClick={() => setDetailSale(null)}
-                  className="flex-1 bg-white border border-outline-variant text-on-surface font-bold py-2.5 rounded-lg hover:bg-surface-container-low transition-all text-sm"
+                  className="flex-1 bg-white border border-outline-variant text-on-surface font-bold py-3 rounded-lg hover:bg-surface-container-highest transition-all text-sm"
                 >
                   Cerrar
+                </button>
+                <button
+                  onClick={downloadPDF}
+                  disabled={pdfLoading}
+                  className="flex-1 bg-[#00687a] text-white font-bold py-3 rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+                >
+                  <span className="material-symbols-outlined text-lg">
+                    {pdfLoading ? "hourglass_top" : "download"}
+                  </span>
+                  {pdfLoading ? "Generando..." : "Descargar PDF"}
                 </button>
               </div>
             </div>
           </div>
-        </div>
+
+          {/* Hidden A4 receipt for PDF capture */}
+          <div
+            ref={pdfRef}
+            style={{
+              position: "fixed",
+              left: "-9999px",
+              top: 0,
+              width: 750,
+              background: "#fff",
+              fontFamily: "Inter, sans-serif",
+              zIndex: -1,
+              display: "none",
+            }}
+          >
+            <div style={{ border: "1px solid #c6c6cd", overflow: "hidden" }}>
+              <div style={{ padding: "20px 28px", borderBottom: "1px solid #c6c6cd", background: "#fcf8fa", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", color: "#00687a", textTransform: "uppercase" }}>Documento Electrónico</span>
+                  <h2 style={{ fontSize: 18, fontWeight: 600, letterSpacing: "-0.01em", color: "#000", marginTop: 2 }}>Boleta de Venta</h2>
+                  <p style={{ fontSize: 10, color: "#45464d", marginTop: 1 }}>R.U.C. 20601234567</p>
+                </div>
+                <div style={{ background: "#57dffe", border: "1px solid rgba(0,104,122,0.2)", borderRadius: 6, padding: "8px 16px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", color: "#006172" }}>NÚMERO DE BOLETA</span>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: "#001f26", marginTop: 1 }}>{detailSale.id}</span>
+                </div>
+              </div>
+              <div style={{ padding: "16px 28px", borderBottom: "1px solid #c6c6cd", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div>
+                  <h3 style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", textTransform: "uppercase", marginBottom: 6 }}>Datos del Cliente</h3>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                    <span style={{ fontSize: 14, color: "#00687a" }}>●</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "#1b1b1d" }}>{detailSale.customer || "Consumidor Final"}</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontSize: 14, color: "#00687a" }}>●</span>
+                    <span style={{ fontSize: 10, color: "#45464d" }}>{paymentLabels[detailSale.payment]?.label || "Efectivo"}</span>
+                  </div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <h3 style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", textTransform: "uppercase", marginBottom: 6 }}>Fecha de Emisión</h3>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end", marginBottom: 4 }}>
+                    <span style={{ fontSize: 14, color: "#00687a" }}>●</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "#1b1b1d" }}>
+                      {(() => { const p = detailSale.date?.split(", ") || []; return p[0] || detailSale.date })()}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end" }}>
+                    <span style={{ fontSize: 14, color: "#76777d" }}>●</span>
+                    <span style={{ fontSize: 10, color: "#45464d" }}>
+                      {(() => { const p = detailSale.date?.split(", ") || []; return p[1] || "" })()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                <thead>
+                  <tr style={{ background: "#f0edef" }}>
+                    <th style={{ padding: "8px 12px", fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", borderBottom: "1px solid #c6c6cd" }}>Descripción</th>
+                    <th style={{ padding: "8px 12px", fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", borderBottom: "1px solid #c6c6cd", textAlign: "center" }}>Cant.</th>
+                    <th style={{ padding: "8px 12px", fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", borderBottom: "1px solid #c6c6cd", textAlign: "right" }}>Unitario</th>
+                    <th style={{ padding: "8px 12px", fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", color: "#76777d", borderBottom: "1px solid #c6c6cd", textAlign: "right" }}>Total</th>
+                  </tr>
+                </thead>
+                <tbody style={{ borderBottom: "1px solid #c6c6cd" }}>
+                  {detailSale.items?.map((item, i) => (
+                    <tr key={i} style={i % 2 ? { background: "#f6f3f5" } : {}}>
+                      <td style={{ padding: "8px 12px" }}>
+                        <span style={{ fontSize: 11, fontWeight: 600, color: "#1b1b1d" }}>{item.name}</span>
+                      </td>
+                      <td style={{ padding: "8px 12px", textAlign: "center", fontSize: 10, color: "#1b1b1d" }}>{item.qty}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right", fontSize: 10, color: "#1b1b1d" }}>S/ {formatPrice(item.price)}</td>
+                      <td style={{ padding: "8px 12px", textAlign: "right", fontSize: 11, fontWeight: 600, color: "#00687a" }}>S/ {formatPrice(item.price * item.qty)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div style={{ padding: "16px 28px", background: "#fcf8fa", borderTop: "1px solid #c6c6cd", display: "flex", justifyContent: "flex-end" }}>
+                <div style={{ width: 300 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 0" }}>
+                    <span style={{ fontSize: 10, color: "#45464d" }}>Subtotal</span>
+                    <span style={{ fontSize: 10, color: "#1b1b1d" }}>S/ {formatPrice(detailSale.total)}</span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderTop: "1px solid #c6c6cd" }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "#000", textTransform: "uppercase", letterSpacing: "-0.01em" }}>Total a Pagar</span>
+                    <span style={{ fontSize: 17, fontWeight: 700, color: "#00687a" }}>S/ {formatPrice(detailSale.total)}</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ padding: "16px 28px", textAlign: "center", borderTop: "1px solid #c6c6cd", background: "#fff" }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: "#00687a", fontStyle: "italic", margin: "0 0 4px" }}>¡Gracias por su compra!</p>
+                <p style={{ fontSize: 10, color: "#76777d", margin: 0 }}>Marlin Poseidon - Expertos en Pesca Deportiva &amp; Tackle Profesional</p>
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       <style>{`
