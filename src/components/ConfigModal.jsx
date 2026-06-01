@@ -5,7 +5,7 @@ const tabs = [
   { id: "general", icon: "person", label: "General" },
   { id: "seguridad", icon: "lock", label: "Seguridad" },
   { id: "apariencia", icon: "palette", label: "Apariencia" },
-  { id: "inventario", icon: "inventory_2", label: "Inventario" },
+  { id: "categorias", icon: "category", label: "Categorías" },
   { id: "notificaciones", icon: "notifications", label: "Notificaciones" },
 ];
 
@@ -14,9 +14,10 @@ export default function ConfigModal({ onClose }) {
   const [darkMode, setDarkMode] = useState(
     () => document.documentElement.classList.contains("dark")
   );
-  const [lowStockThreshold, setLowStockThreshold] = useState(
-    () => db.getLowStockThreshold()
-  );
+  const [categories, setCategories] = useState(() => db.getCategories());
+  const [newCategory, setNewCategory] = useState("");
+  const [editingCat, setEditingCat] = useState(null);
+  const [editCatValue, setEditCatValue] = useState("");
 
   const toggleTheme = (isDark) => {
     const root = document.documentElement;
@@ -178,34 +179,100 @@ export default function ConfigModal({ onClose }) {
               </section>
             )}
 
-            {activeTab === "inventario" && (
+
+            {activeTab === "categorias" && (
               <section className="space-y-3 sm:space-y-4">
-                <h3 className="text-[10px] sm:text-xs font-bold text-outline uppercase tracking-wider mb-3 sm:mb-4">Alertas de Inventario</h3>
-                <div className="p-4 sm:p-5 bg-surface-container rounded-xl border border-outline-variant space-y-4">
-                  <div className="space-y-1">
-                    <label className="text-sm font-semibold text-primary">Umbral de Stock Bajo</label>
-                    <p className="text-xs text-on-surface-variant">Define la cantidad mínima de unidades a partir de la cual un producto se marca como "Stock bajo".</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="number" min="0"
-                      className="w-28 px-3 sm:px-4 py-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-sm focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all text-center font-bold text-lg"
-                      value={lowStockThreshold === "" ? "" : lowStockThreshold}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        const parsed = v === "" ? "" : parseInt(v, 10);
-                        setLowStockThreshold(parsed);
-                        if (parsed !== "" && !isNaN(parsed)) {
-                          db.saveLowStockThreshold(parsed);
-                        }
-                      }}
-                    />
-                    <span className="text-sm text-on-surface-variant">unidades</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                    <span className="material-symbols-outlined text-amber-stock text-lg">info</span>
-                    <p className="text-xs text-amber-stock">Los productos con stock igual o menor a este número se mostrarán con el estado "Stock bajo" en el POS y en el inventario.</p>
-                  </div>
+                <h3 className="text-[10px] sm:text-xs font-bold text-outline uppercase tracking-wider mb-3 sm:mb-4">Gestión de Categorías</h3>
+                <div className="flex items-center gap-2 mb-4">
+                  <input
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    placeholder="Nueva categoría..."
+                    className="flex-1 px-3 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-sm focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && newCategory.trim()) {
+                        const updated = [...categories, newCategory.trim()];
+                        setCategories(updated);
+                        db.saveCategories(updated);
+                        setNewCategory("");
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => {
+                      if (!newCategory.trim()) return;
+                      const updated = [...categories, newCategory.trim()];
+                      setCategories(updated);
+                      db.saveCategories(updated);
+                      setNewCategory("");
+                    }}
+                    className="px-4 py-2 bg-secondary text-on-secondary rounded-lg text-sm font-bold hover:opacity-90 transition-all shrink-0"
+                  >
+                    Agregar
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  {categories.map((cat) => (
+                    <div key={cat} className="flex items-center justify-between p-3 bg-surface-container rounded-xl border border-outline-variant">
+                      {editingCat === cat ? (
+                        <div className="flex items-center gap-2 flex-1">
+                          <input
+                            value={editCatValue}
+                            onChange={(e) => setEditCatValue(e.target.value)}
+                            className="flex-1 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-sm focus:ring-2 focus:ring-secondary/20 outline-none"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && editCatValue.trim()) {
+                                const updated = categories.map((c) => c === cat ? editCatValue.trim() : c);
+                                setCategories(updated);
+                                db.saveCategories(updated);
+                                setEditingCat(null);
+                              }
+                              if (e.key === "Escape") setEditingCat(null);
+                            }}
+                          />
+                          <button
+                            onClick={() => {
+                              if (!editCatValue.trim()) return;
+                              const updated = categories.map((c) => c === cat ? editCatValue.trim() : c);
+                              setCategories(updated);
+                              db.saveCategories(updated);
+                              setEditingCat(null);
+                            }}
+                            className="p-1.5 text-secondary hover:bg-surface-container-low rounded-lg"
+                          >
+                            <span className="material-symbols-outlined text-lg">check</span>
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <span className="material-symbols-outlined text-outline text-lg">category</span>
+                            <span className="text-sm font-semibold text-primary">{cat}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => { setEditingCat(cat); setEditCatValue(cat); }}
+                              className="p-1.5 text-outline hover:text-secondary hover:bg-surface-container-low rounded-lg"
+                            >
+                              <span className="material-symbols-outlined text-lg">edit</span>
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (categories.length <= 1) return;
+                                const updated = categories.filter((c) => c !== cat);
+                                setCategories(updated);
+                                db.saveCategories(updated);
+                              }}
+                              className="p-1.5 text-outline hover:text-error hover:bg-surface-container-low rounded-lg"
+                            >
+                              <span className="material-symbols-outlined text-lg">delete</span>
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </section>
             )}

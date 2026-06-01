@@ -163,7 +163,7 @@ export default function Layout() {
             </button>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 relative" ref={notifRef}>
-            <button onClick={() => { setShowNotif((p) => !p); if (!showNotif) setNotifSeen(true); }} className="hover:bg-surface-container-low p-2 rounded-full transition-colors relative">
+            <button onClick={() => { setShowNotif((p) => !p); if (!showNotif) setNotifSeen(true); }} className="hover:bg-surface-container-low p-2 rounded-full transition-all hover:scale-110 active:scale-95 relative">
               <span className="material-symbols-outlined text-on-surface-variant">notifications</span>
               {urgentCount > 0 && !notifSeen && (
                 <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-error text-on-error text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-surface px-1">
@@ -199,7 +199,7 @@ export default function Layout() {
                 </div>
               </div>
             )}
-            <button onClick={() => setShowConfig(true)} className="hover:bg-surface-container-low p-2 rounded-full transition-colors">
+            <button onClick={() => setShowConfig(true)} className="hover:bg-surface-container-low hover:scale-110 active:scale-95 p-2 rounded-full transition-all">
               <span className="material-symbols-outlined text-on-surface-variant">settings</span>
             </button>
           </div>

@@ -107,10 +107,9 @@ export default function Inventario() {
     }
   }, [showAddModal, stockModalType, showMobilePanel]);
 
-  const lowStockThreshold = db.getLowStockThreshold();
   const outOfStock = products.filter((p) => p.stock === 0);
-  const lowStock = products.filter((p) => p.stock > 0 && p.stock <= lowStockThreshold);
-  const inStock = products.filter((p) => p.stock > lowStockThreshold);
+  const lowStock = products.filter((p) => p.stock > 0 && p.stock <= p.minStock);
+  const inStock = products.filter((p) => p.stock > p.minStock);
   const filteredProducts = products.filter((p) => {
     const term = search.trim().toLowerCase();
     if (!term) return true;
@@ -187,29 +186,29 @@ export default function Inventario() {
     }
   };
 
-  const getStockBadge = (stock) => {
+  const getStockBadge = (stock, minStock) => {
     if (stock === 0)
       return <span className="bg-rose-100 text-rose-stock text-xs font-bold px-3 py-1 rounded-full">{stock}</span>;
-    if (stock <= lowStockThreshold)
+    if (stock <= minStock)
       return <span className="bg-amber-100 text-amber-stock text-xs font-bold px-3 py-1 rounded-full">{stock}</span>;
     return <span className="bg-secondary/10 text-secondary text-xs font-bold px-3 py-1 rounded-full">{stock}</span>;
   };
 
-  const getStockColor = (stock) => {
+  const getStockColor = (stock, minStock) => {
     if (stock === 0) return "text-rose-stock";
-    if (stock <= lowStockThreshold) return "text-amber-stock";
+    if (stock <= minStock) return "text-amber-stock";
     return "text-secondary";
   };
 
-  const getMobileStockBadge = (stock) => {
+  const getMobileStockBadge = (stock, minStock) => {
     if (stock === 0) return "bg-error/10 text-error border-error/20";
-    if (stock <= lowStockThreshold) return "bg-amber-100 text-amber-stock border-amber-200";
+    if (stock <= minStock) return "bg-amber-100 text-amber-stock border-amber-200";
     return "bg-secondary/10 text-secondary border-secondary/20";
   };
 
-  const getMobileStockLabel = (stock) => {
+  const getMobileStockLabel = (stock, minStock) => {
     if (stock === 0) return "AGOTADO";
-    if (stock <= lowStockThreshold) return `${stock} STOCK BAJO`;
+    if (stock <= minStock) return `${stock} STOCK BAJO`;
     return `${stock} EN STOCK`;
   };
 
@@ -309,8 +308,8 @@ export default function Inventario() {
                 <p className="text-sm text-on-surface-variant truncate">{p.brand} · {p.category}</p>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${getMobileStockBadge(p.stock)}`}>
-                  {getMobileStockLabel(p.stock)}
+                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${getMobileStockBadge(p.stock, p.minStock)}`}>
+                  {getMobileStockLabel(p.stock, p.minStock)}
                 </span>
               </div>
             </div>
@@ -362,7 +361,7 @@ export default function Inventario() {
           <div className="min-w-0 flex-1">
             <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: "#d97706" }}>Stock Bajo</h4>
             <p className="font-semibold text-primary truncate text-lg">{lowStock.length} productos</p>
-            <p className="text-sm text-on-surface-variant">Por debajo del umbral ({lowStockThreshold} uds)</p>
+            <p className="text-sm text-on-surface-variant">Por debajo del stock mínimo definido</p>
           </div>
           <span className="material-symbols-outlined text-outline">chevron_right</span>
         </button>
@@ -414,7 +413,7 @@ export default function Inventario() {
                     <td className="py-4 px-4 text-sm text-on-surface-variant">{p.brand}</td>
                     <td className="py-4 px-4 text-sm text-on-surface-variant">{p.category}</td>
                     <td className="py-4 px-4 font-bold text-primary whitespace-nowrap">S/ {p.price.toFixed(2)}</td>
-                    <td className="py-4 px-4">{getStockBadge(p.stock)}</td>
+                    <td className="py-4 px-4">{getStockBadge(p.stock, p.minStock)}</td>
                     <td className="py-4 px-4 text-center relative">
                       <div className="relative inline-flex">
                         <button
@@ -618,12 +617,16 @@ export default function Inventario() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-outline uppercase">Categoría</label>
-                  <input
+                  <select
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
                     value={newProduct.category}
                     onChange={(e) => updateNewProduct("category", e.target.value)}
-                    placeholder="Ej: Cañas"
-                  />
+                  >
+                    <option value="">Seleccionar categoría</option>
+                    {db.getCategories().map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -848,41 +851,34 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
           </div>
           <div className="space-y-1">
             <label className="text-xs font-bold text-outline uppercase">Categoría</label>
-            <input
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
-              readOnly={!editing}
-              value={editing ? draft.category : selected.category}
-              onChange={(e) => updateDraft("category", e.target.value)}
-            />
+            {editing ? (
+              <select
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
+                value={draft.category}
+                onChange={(e) => updateDraft("category", e.target.value)}
+              >
+                <option value="">Seleccionar categoría</option>
+                {db.getCategories().map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            ) : (
+              <p className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary">{selected.category}</p>
+            )}
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-outline uppercase">Precio (S/)</label>
-            <input
-              type="number" step="0.01"
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
-              readOnly={!editing}
-              value={editing ? (draft.price === "" ? "" : draft.price) : selected.price}
-              onChange={(e) => {
-                const v = e.target.value;
-                updateDraft("price", v === "" ? "" : parseFloat(v));
-              }}
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-outline uppercase">Stock Actual</label>
-            <input
-              type="number"
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
-              readOnly={!editing}
-              value={editing ? (draft.stock === "" ? "" : draft.stock) : selected.stock}
-              onChange={(e) => {
-                const v = e.target.value;
-                updateDraft("stock", v === "" ? "" : parseInt(v));
-              }}
-            />
-          </div>
+        <div className="space-y-1">
+          <label className="text-xs font-bold text-outline uppercase">Precio (S/)</label>
+          <input
+            type="number" step="0.01"
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
+            readOnly={!editing}
+            value={editing ? (draft.price === "" ? "" : draft.price) : selected.price}
+            onChange={(e) => {
+              const v = e.target.value;
+              updateDraft("price", v === "" ? "" : parseFloat(v));
+            }}
+          />
         </div>
         <div className="pt-3 border-t border-outline-variant">
           <h4 className="text-xs font-bold text-outline uppercase tracking-wider mb-3">Características</h4>
@@ -945,11 +941,38 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
                   }}
                 />
               ) : (
-                <p className={`text-2xl font-bold ${getStockColor(selected.stock)}`}>{selected.stock}</p>
+                <p className={`text-2xl font-bold ${getStockColor(selected.stock, selected.minStock)}`}>{selected.stock}</p>
               )}
             </div>
           </div>
         </div>
+        {(() => {
+          const s = editing ? draft.stock : selected.stock;
+          const m = editing ? draft.minStock : selected.minStock;
+          if (s > 0 && s <= m) {
+            return (
+              <div className="flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                <span className="material-symbols-outlined text-amber-stock text-lg mt-0.5">inventory_2</span>
+                <div>
+                  <p className="text-sm font-bold text-amber-stock">Stock Bajo</p>
+                  <p className="text-xs text-amber-stock/80">Este producto tiene {s} unidades, por debajo del stock mínimo ({m} uds). Considera reabastecer.</p>
+                </div>
+              </div>
+            );
+          }
+          if (s === 0) {
+            return (
+              <div className="flex items-start gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <span className="material-symbols-outlined text-rose-stock text-lg mt-0.5">error_outline</span>
+                <div>
+                  <p className="text-sm font-bold text-rose-stock">Agotado</p>
+                  <p className="text-xs text-rose-stock/80">Este producto no tiene unidades disponibles. Reabastece para poder vender.</p>
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })()}
         <button type="button" onClick={() => { setDeleteTargetId(selected.id); setShowDeleteModal(true); }} className="w-full bg-error/10 text-error py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-error/20 transition-all mt-2">
           <span className="material-symbols-outlined">delete</span>
         </button>

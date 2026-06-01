@@ -4,7 +4,7 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { db } from "../utils/db";
 
-const categories = ["TODOS", "MOTORES", "ELECTRÓNICA", "EQUIPAMIENTO", "ANZUELOS", "CAÑAS", "CARRETES", "SEÑUELOS", "HILOS"];
+const categories = ["TODOS", ...db.getCategories().map((c) => c.toUpperCase())];
 
 const paymentMethods = [
   { id: "cash", icon: "payments", label: "Efectivo" },

@@ -6,6 +6,9 @@ const ORDERS_KEY = "marlin_db_orders";
 const USERS_KEY = "marlin_db_users";
 const ACTIVITIES_KEY = "marlin_db_activities";
 const LOW_STOCK_THRESHOLD_KEY = "marlin_low_stock_threshold";
+const CATEGORIES_KEY = "marlin_db_categories";
+
+const initialCategories = ["Motores", "Electrónica", "Equipamiento", "Anzuelos", "Cañas", "Carretes", "Señuelos", "Hilos"];
 
 const initialProducts = [
   { id: 1, name: "Penn Battle III 6000", brand: "Penn", category: "Carretes", price: 189.99, stock: 10, minStock: 5, code: "CAR-001", image: "https://picsum.photos/seed/product1/200/200", caracteristicas: "Carrete giratorio de 6000 con 5 rodamientos, ratio 5.2:1, capacidad 200m/30lb", modalidad: "Spinning" },
@@ -131,4 +134,8 @@ export const db = {
   // LOW STOCK THRESHOLD (global setting)
   getLowStockThreshold: () => parseInt(localStorage.getItem(LOW_STOCK_THRESHOLD_KEY) || "5", 10),
   saveLowStockThreshold: (value) => localStorage.setItem(LOW_STOCK_THRESHOLD_KEY, String(value)),
+
+  // CATEGORIES
+  getCategories: () => getStored(CATEGORIES_KEY, initialCategories),
+  saveCategories: (categories) => saveStored(CATEGORIES_KEY, categories),
 };
