@@ -173,11 +173,11 @@ export default function HistorialVentas() {
         </div>
       </div>
 
-      <section className="bg-white border border-outline-variant rounded-xl p-4 sm:p-6 shadow-sm">
+      <section className="sales-filter-panel bg-white border border-outline-variant rounded-xl p-4 sm:p-6 shadow-sm">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
           <span className="material-symbols-outlined text-on-surface-variant shrink-0">filter_list</span>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 flex-1 w-full">
-            <div className="space-y-1">
+            <div className="sales-filter-field space-y-1">
               <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
                 MÉTODO DE PAGO
               </label>
@@ -192,7 +192,7 @@ export default function HistorialVentas() {
                 placeholder="Todos los métodos"
               />
             </div>
-            <div className="space-y-1 sm:col-span-2">
+            <div className="sales-filter-field space-y-1 sm:col-span-2">
               <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
                 BUSCAR
               </label>
@@ -201,15 +201,15 @@ export default function HistorialVentas() {
                 <input
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                  className="w-full bg-white border border-outline-variant rounded-lg text-sm py-2 pl-10 pr-3 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
+                  className="sales-filter-control w-full bg-white border border-outline-variant rounded-lg text-sm pl-10 pr-3 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
                   placeholder="Buscar por boleta, cliente o producto..."
                 />
               </div>
             </div>
-            <div className="flex items-end">
+            <div className="sales-filter-field flex items-end">
               <button
                 onClick={() => { setFilterMethod("all"); setSearch(""); setPage(1); }}
-                className="w-full bg-surface-container-high text-on-surface font-semibold text-sm py-2 rounded-lg hover:bg-outline-variant transition-colors"
+                className="sales-filter-control w-full bg-surface-container-high text-on-surface font-semibold text-sm rounded-lg hover:bg-outline-variant transition-colors justify-center text-center"
               >
                 Limpiar Filtros
               </button>

@@ -11,6 +11,47 @@
   scrollbar-width: none;
 }
 
+.sales-filter-panel .sales-filter-control,
+.sales-filter-panel .sales-filter-field > .relative > button {
+  height: 42px;
+  min-height: 42px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.sales-filter-panel .sales-filter-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.inventory-detail-panel .inventory-detail-control,
+.inventory-detail-panel .space-y-1 > .relative > button {
+  height: 40px;
+  min-height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.inventory-detail-panel .inventory-detail-control {
+  display: flex;
+  align-items: center;
+}
+
+.audit-filter-panel .audit-filter-control,
+.audit-filter-panel .relative > button {
+  height: 42px;
+  min-height: 42px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.audit-filter-panel .audit-filter-control {
+  display: flex;
+  align-items: center;
+}
+
 .pos-shell {
   container-type: inline-size;
 }

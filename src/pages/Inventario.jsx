@@ -775,7 +775,7 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
     }
   }, [editing, draft.caracteristicas]);
   return (
-    <div className={`w-full max-w-md ${mobile ? "" : "@md:w-[420px]"} bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden`}>
+    <div className={`inventory-detail-panel w-full max-w-md ${mobile ? "" : "@md:w-[420px]"} bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden`}>
       {!mobile && (
         <div className="p-4 border-b border-outline-variant flex items-center justify-between">
           <h3 className="font-semibold text-lg text-primary">Detalles del Producto</h3>
@@ -826,7 +826,7 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
         <div className="space-y-1">
           <label className="text-xs font-bold text-outline uppercase">Nombre del Producto</label>
           <input
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
+            className="inventory-detail-control w-full bg-slate-50 border border-slate-200 rounded-lg px-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
             readOnly={!editing}
             value={editing ? draft.name : selected.name}
             onChange={(e) => updateDraft("name", e.target.value)}
@@ -836,7 +836,7 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
           <div className="space-y-1">
             <label className="text-xs font-bold text-outline uppercase">Marca</label>
             <input
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
+              className="inventory-detail-control w-full bg-slate-50 border border-slate-200 rounded-lg px-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
               readOnly={!editing}
               value={editing ? draft.brand : selected.brand}
               onChange={(e) => updateDraft("brand", e.target.value)}
@@ -852,7 +852,7 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
                 placeholder="Seleccionar categoría"
               />
             ) : (
-              <p className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary">{selected.category}</p>
+              <p className="inventory-detail-control w-full bg-slate-50 border border-slate-200 rounded-lg px-2 text-sm text-primary">{selected.category}</p>
             )}
           </div>
         </div>
@@ -860,7 +860,7 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
           <label className="text-xs font-bold text-outline uppercase">Precio (S/)</label>
           <input
             type="number" step="0.01"
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
+            className="inventory-detail-control w-full bg-slate-50 border border-slate-200 rounded-lg px-2 text-sm text-primary focus:ring-2 focus:ring-secondary/20"
             readOnly={!editing}
             value={editing ? (draft.price === "" ? "" : draft.price) : selected.price}
             onChange={(e) => {
