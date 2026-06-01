@@ -6,6 +6,7 @@ import Inventario from "./pages/Inventario";
 import Pagos from "./pages/Pagos";
 import PuntoVenta from "./pages/PuntoVenta";
 import Usuarios from "./pages/Usuarios";
+import Auditoria from "./pages/Auditoria";
 import HistorialVentas from "./pages/HistorialVentas";
 import Login from "./pages/Login";
 
@@ -28,6 +29,7 @@ function AppRoutes() {
         <Route path="/pagos" element={<Pagos />} />
         <Route path="/punto-venta" element={<PuntoVenta />} />
         <Route path="/usuarios" element={<Usuarios />} />
+        <Route path="/auditoria" element={<Auditoria />} />
         <Route path="/historial-ventas" element={<HistorialVentas />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -14,6 +14,7 @@ const navItems = [
   { to: "/pagos", icon: "payments", label: "Verificación de Pagos" },
   { section: "Administración" },
   { to: "/usuarios", icon: "group", label: "Usuarios" },
+  { to: "/auditoria", icon: "history", label: "Auditoría" },
 ];
 
 const notifications = [

@@ -9,7 +9,6 @@ export default function Usuarios() {
   const [roleTarget, setRoleTarget] = useState(null);
   const [menuPos, setMenuPos] = useState({ top: 0, right: 0 });
   const menuRef = useRef(null);
-  const timeline = db.getActivities();
 
   const roles = ["Admin", "Operador", "Inventario"];
 
@@ -76,8 +75,8 @@ export default function Usuarios() {
         </button>
       </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <section className="col-span-1 lg:col-span-8 space-y-6">
+              <div className="grid grid-cols-1 gap-6">
+        <section className="col-span-1 space-y-6">
           <div className="bg-white rounded-xl border border-outline-variant overflow-hidden shadow-sm">
             <div className="px-4 py-4 border-b border-outline-variant bg-surface-bright flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div className="relative w-full sm:w-auto sm:min-w-[240px]">
@@ -209,43 +208,7 @@ export default function Usuarios() {
               </div>
             </div>
           </div>
-        </section>
-
-        <section className="col-span-1 lg:col-span-4">
-          <div className="bg-white border border-outline-variant rounded-xl flex flex-col h-full shadow-sm">
-            <div className="px-4 py-4 border-b border-outline-variant bg-surface-bright">
-              <h3 className="font-semibold flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary">history</span>
-                Registro de Auditoría
-              </h3>
-              <p className="text-xs text-on-surface-variant">Actividad reciente del sistema</p>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 relative">
-              <div className="absolute left-[37px] top-4 bottom-4 w-0.5 bg-outline-variant/50"></div>
-              {timeline.map((item, i) => (
-                <div key={i} className="relative flex gap-4">
-                  <div className={`relative z-10 w-10 h-10 rounded-full ${item.iconBg.includes("text") ? item.iconBg : `${item.iconBg} text-on-secondary`} flex items-center justify-center shrink-0 shadow-sm`}>
-                    <span className="material-symbols-outlined text-lg">{item.icon}</span>
-                  </div>
-                  <div className="pt-1 min-w-0">
-                    <p className="font-semibold text-sm text-primary leading-snug" dangerouslySetInnerHTML={{ __html: item.text }} />
-                    <p className="text-xs text-on-surface-variant">{item.meta}</p>
-                    {item.amount && (
-                      <div className="p-2 rounded-lg border border-outline-variant/30 text-xs bg-surface-container-low text-on-surface-variant">
-                        Monto: {item.amount}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="p-4 border-t border-outline-variant">
-              <button className="w-full text-center py-2 text-xs font-bold text-secondary hover:bg-secondary/5 rounded-lg transition-colors">
-                Ver Todo el Historial
-              </button>
-            </div>
-          </div>
-        </section>
+          </section>
       </div>
     </div>
   );
