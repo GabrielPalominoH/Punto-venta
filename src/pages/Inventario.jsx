@@ -302,37 +302,6 @@ export default function Inventario() {
                 <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${getMobileStockBadge(p.stock)}`}>
                   {getMobileStockLabel(p.stock)}
                 </span>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    setMenuPos({ top: rect.bottom + 4, right: window.innerWidth - rect.right });
-                    setMenuOpenId(menuOpenId === p.id ? null : p.id);
-                  }}
-                  className="text-on-surface-variant p-1 rounded-lg active:bg-surface-container"
-                >
-                  <span className="material-symbols-outlined">more_vert</span>
-                </button>
-                {menuOpenId === p.id && createPortal(
-                  <div ref={menuRef} className="bg-white border border-outline-variant rounded-lg shadow-xl min-w-[140px] py-1" style={{ position: 'fixed', top: menuPos.top, right: menuPos.right, zIndex: 50 }} onClick={(e) => e.stopPropagation()}>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); startEditing(p); setShowMobilePanel(true); }}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
-                    >
-                      <span className="material-symbols-outlined text-base">edit</span>
-                      Editar
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); deleteProduct(p.id); }}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-error/10 transition-colors text-left"
-                    >
-                      <span className="material-symbols-outlined text-base">delete</span>
-                      Eliminar
-                    </button>
-                  </div>,
-                  document.body
-                )}
               </div>
             </div>
           </div>
@@ -516,6 +485,7 @@ export default function Inventario() {
             cancelEditing={cancelEditing}
             handleImageUpload={handleImageUpload}
             getStockColor={getStockColor}
+            deleteProduct={deleteProduct}
           />
         </div>
       </div>
@@ -549,21 +519,12 @@ export default function Inventario() {
                 cancelEditing={cancelEditing}
                 handleImageUpload={handleImageUpload}
                 getStockColor={getStockColor}
+                deleteProduct={deleteProduct}
                 mobile
               />
             </div>
           </div>
         </div>
-      )}
-
-      {/* Mobile edit button (fixed overlay) */}
-      {!editing && selected.id !== -1 && (
-        <button
-          onClick={() => { setEditing(true); }}
-          className="fixed bottom-6 right-6 lg:hidden bg-secondary text-on-secondary w-14 h-14 rounded-full shadow-lg flex items-center justify-center z-30 hover:opacity-90 active:scale-95 transition-all"
-        >
-          <span className="material-symbols-outlined">edit</span>
-        </button>
       )}
 
       {stockModalType && (
@@ -773,7 +734,7 @@ export default function Inventario() {
   );
 }
 
-function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEditing, cancelEditing, handleImageUpload, getStockColor, mobile }) {
+function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEditing, cancelEditing, handleImageUpload, getStockColor, deleteProduct, mobile }) {
   const caractRef = useRef(null);
   useEffect(() => {
     if (editing && caractRef.current) {
@@ -953,9 +914,8 @@ function DetailPanel({ selected, editing, draft, setEditing, updateDraft, saveEd
             </div>
           </div>
         </div>
-        <button type="button" className="w-full bg-teal-brand text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-teal-700 transition-all mt-2">
-          <span className="material-symbols-outlined">shopping_cart_checkout</span>
-          Ordenar Reabastecimiento
+        <button type="button" onClick={() => deleteProduct(selected.id)} className="w-full bg-error/10 text-error py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-error/20 transition-all mt-2">
+          <span className="material-symbols-outlined">delete</span>
         </button>
       </form>
     </div>
