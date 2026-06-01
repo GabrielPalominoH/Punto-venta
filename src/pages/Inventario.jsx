@@ -28,7 +28,13 @@ export default function Inventario() {
     if (highlightedId && !stockModalType) {
       const id = highlightedId;
       setTimeout(() => {
-        document.getElementById(`product-row-${id}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+        const els = document.querySelectorAll(`[id="product-row-${id}"]`);
+        for (const el of els) {
+          if (el.offsetParent !== null) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            break;
+          }
+        }
       }, 100);
       const timer = setTimeout(() => setHighlightedId(null), 2100);
       return () => clearTimeout(timer);
