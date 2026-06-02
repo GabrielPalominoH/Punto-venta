@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { db } from "../utils/db";
 import Combobox from "../components/Combobox";
+import DatePicker from "../components/DatePicker";
 
 function extractPerson(text) {
   const m = text.match(/<strong>([^<]+)<\/strong>/g);
@@ -84,26 +85,24 @@ export default function Auditoria() {
             </div>
             <div>
               <label className="block text-xs text-on-surface-variant mb-1">Desde</label>
-              <input
-                type="date"
+              <DatePicker
                 value={dateFrom}
                 max={dateTo || today}
-                onChange={(e) => {
-                  setDateFrom(e.target.value); setPage(1);
-                  if (dateTo && e.target.value > dateTo) setDateTo("");
+                onChange={(v) => {
+                  setDateFrom(v); setPage(1);
+                  if (dateTo && v > dateTo) setDateTo("");
                 }}
-                className="audit-filter-control w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 text-sm focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
+                placeholder="Desde"
               />
             </div>
             <div>
               <label className="block text-xs text-on-surface-variant mb-1">Hasta</label>
-              <input
-                type="date"
+              <DatePicker
                 value={dateTo}
                 min={dateFrom || undefined}
                 max={today}
-                onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
-                className="audit-filter-control w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 text-sm focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
+                onChange={(v) => { setDateTo(v); setPage(1); }}
+                placeholder="Hasta"
               />
             </div>
             <div>
