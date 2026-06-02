@@ -74,14 +74,14 @@ export default function Layout() {
     <aside
       ref={isMobile ? sidebarRef : undefined}
       className={`fixed left-0 top-0 h-screen bg-surface border-r border-outline-variant flex flex-col py-6 z-50 transition-[width,padding] duration-300 ${
-        isCollapsed ? 'w-[72px] overflow-x-visible overflow-y-auto' : 'w-[260px] px-3 overflow-y-auto'
+        isCollapsed ? 'w-[72px] overflow-hidden' : 'w-[260px] px-3 overflow-y-auto'
       }`}
     >
       <div className={`flex items-center mb-8 ${isCollapsed ? 'justify-center px-0' : 'gap-3 px-3'}`}>
         <div
-          onClick={() => { if (isCollapsed) setCollapsed(false); }}
-          className={`relative group w-10 h-10 bg-primary flex items-center justify-center rounded-lg shrink-0 ${isCollapsed ? 'cursor-pointer' : ''}`}
-          title={isCollapsed ? "Expandir menú" : undefined}
+          onClick={() => setCollapsed(prev => isCollapsed ? false : !prev)}
+          className={`relative group w-10 h-10 bg-primary flex items-center justify-center rounded-lg shrink-0 cursor-pointer ${isCollapsed ? '' : ''}`}
+          title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
         >
           {isCollapsed ? (
             <>
@@ -100,26 +100,18 @@ export default function Layout() {
             <p className="text-on-surface-variant text-[10px] uppercase tracking-widest font-semibold">Admin Dashboard</p>
           </div>
         </div>
-        {!isCollapsed && (
-          <button
-            onClick={() => setCollapsed(true)}
-            className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-surface-container-high transition-all duration-300 shrink-0 group"
-            title="Colapsar menú"
-          >
-            <span className="material-symbols-outlined text-on-surface-variant text-lg transition-all duration-300 group-hover:scale-110">first_page</span>
-          </button>
-        )}
       </div>
 
-      <nav className="flex-1 space-y-0.5">
+      <div className={`${isCollapsed ? 'flex-1 min-h-0 overflow-y-auto' : 'flex-1'}`}>
+      <nav className="space-y-0.5">
         {navItems.map((item, i) =>
           item.section ? (
             <p
               key={item.section}
-              className={`px-3 text-[10px] font-bold text-outline uppercase tracking-widest overflow-hidden transition-all duration-300 ${
+              className={`text-[10px] font-bold text-outline uppercase tracking-widest overflow-hidden transition-all duration-300 ${
                 isCollapsed
-                  ? 'max-h-0 opacity-0 mt-0'
-                  : `${i > 0 ? 'mt-5' : 'mt-0'} max-h-8 opacity-100`
+                  ? 'hidden'
+                  : `px-3 ${i > 0 ? 'mt-5' : 'mt-0'} max-h-8 opacity-100`
               }`}
             >
               {item.section}
@@ -132,29 +124,31 @@ export default function Layout() {
               onClick={() => { if (isMobile) setSidebarOpen(false); }}
               title={isCollapsed ? item.label : undefined}
               className={({ isActive }) =>
-                `group relative flex items-center gap-3 py-2.5 px-3 rounded-lg transition-all duration-200 text-sm ${
+                `group relative flex items-center text-sm transition-all duration-200 rounded-lg ${
+                  isCollapsed
+                    ? 'justify-center gap-0 py-2.5'
+                    : 'gap-3 py-2.5 px-3'
+                } ${
                   isActive
-                    ? "text-secondary font-bold bg-secondary/10 border-r-4 border-secondary rounded-r-none"
+                    ? isCollapsed
+                      ? "text-secondary font-bold bg-secondary/10"
+                      : "text-secondary font-bold bg-secondary/10 border-r-4 border-secondary rounded-r-none"
                     : "text-on-surface-variant hover:bg-surface-container-high"
                 }`
               }
             >
               <span className="material-symbols-outlined shrink-0">{item.icon}</span>
               <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
-                isCollapsed ? 'max-w-0 opacity-0' : 'max-w-40 opacity-100'
+                isCollapsed ? 'max-w-0 opacity-0 invisible' : 'max-w-40 opacity-100 visible'
               }`}>{item.label}</span>
-              {isCollapsed && (
-                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-primary text-on-primary text-xs font-medium rounded-lg whitespace-nowrap shadow-lg z-[60] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none">
-                  {item.label}
-                </div>
-              )}
             </NavLink>
           )
         )}
       </nav>
+      </div>
 
-      <div className="mt-auto pt-4 border-t border-outline-variant space-y-1 px-3">
-        <div className="flex items-center gap-3">
+      <div className={`mt-auto pt-4 border-t border-outline-variant ${isCollapsed ? 'space-y-1' : 'space-y-2 px-3'}`}>
+        <div className={`flex items-center ${isCollapsed ? 'justify-center gap-0' : 'gap-3'}`}>
           <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center text-sm font-bold text-on-surface-variant shrink-0">
             {initials}
           </div>
@@ -167,12 +161,14 @@ export default function Layout() {
         </div>
         <button
           onClick={() => { logout(); navigate("/login", { replace: true }); }}
-          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-on-surface-variant hover:text-error hover:bg-error/5 rounded-lg transition-all"
+          className={`flex items-center text-sm text-on-surface-variant hover:text-error hover:bg-error/5 rounded-lg transition-all ${
+            isCollapsed ? 'justify-center gap-0 p-2.5 w-full' : 'gap-2 w-full px-3 py-2'
+          }`}
           title={isCollapsed ? "Cerrar Sesión" : undefined}
         >
           <span className="material-symbols-outlined text-lg shrink-0">logout</span>
           <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
-            isCollapsed ? 'max-w-0 opacity-0' : 'max-w-24 opacity-100'
+            isCollapsed ? 'max-w-0 opacity-0 invisible' : 'max-w-24 opacity-100 visible'
           }`}>Cerrar Sesión</span>
         </button>
       </div>
