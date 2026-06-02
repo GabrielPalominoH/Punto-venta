@@ -91,12 +91,23 @@ export default function Layout() {
         </div>
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-surface-container-high transition-colors shrink-0"
+          className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-surface-container-high transition-all duration-300 shrink-0 relative group"
           title={collapsed ? "Expandir menú" : "Colapsar menú"}
         >
-          <span className="material-symbols-outlined text-on-surface-variant text-lg">
-            {collapsed ? 'chevron_right' : 'chevron_left'}
-          </span>
+          {collapsed ? (
+            <>
+              <span className="material-symbols-outlined text-outline text-lg transition-all duration-300 group-hover:opacity-0 group-hover:scale-75">
+                sailing
+              </span>
+              <span className="material-symbols-outlined text-on-surface-variant text-lg absolute transition-all duration-300 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100">
+                left_panel_open
+              </span>
+            </>
+          ) : (
+            <span className="material-symbols-outlined text-on-surface-variant text-lg transition-all duration-300 group-hover:scale-110">
+              left_panel_close
+            </span>
+          )}
         </button>
       </div>
 
