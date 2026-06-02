@@ -50,28 +50,28 @@ export default function Pagos() {
 
   const typeStyle = (type) =>
     type === "Delivery"
-      ? "bg-teal-50 text-teal-700 border border-teal-100"
-      : "bg-amber-50 text-amber-700 border border-amber-100";
+      ? "bg-secondary/10 text-secondary border border-secondary/20"
+      : "bg-primary/10 text-primary border border-primary/20";
 
   const statusStyle = (status) => {
     switch (status) {
       case "approved":
-        return { dot: "bg-green-500", text: "text-green-700", bg: "bg-green-50", label: "Aprobado" };
+        return { dot: "bg-secondary", text: "text-secondary", bg: "bg-secondary/10", label: "Aprobado" };
       case "rejected":
-        return { dot: "bg-red-500", text: "text-red-700", bg: "bg-red-50", label: "Rechazado" };
+        return { dot: "bg-error", text: "text-error", bg: "bg-error/10", label: "Rechazado" };
       default:
-        return { dot: "bg-amber-500", text: "text-amber-700", bg: "bg-amber-50", label: "Pendiente" };
+        return { dot: "bg-amber-stock", text: "text-amber-stock", bg: "bg-amber-stock/10", label: "Pendiente" };
     }
   };
 
   return (
     <div className="space-y-6">
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="bg-amber-stock/10 border border-amber-stock/20 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-amber-600 shrink-0">warning</span>
-          <p className="font-semibold text-amber-700 text-sm sm:text-base">Recordatorio: Revisión masiva programada a las 5:00 PM</p>
+          <span className="material-symbols-outlined text-amber-stock shrink-0">warning</span>
+          <p className="font-semibold text-amber-stock text-sm sm:text-base">Recordatorio: Revisión masiva programada a las 5:00 PM</p>
         </div>
-        <button className="text-amber-700 hover:underline text-xs font-bold uppercase shrink-0">Ver Detalles</button>
+        <button className="text-amber-stock hover:underline text-xs font-bold uppercase shrink-0">Ver Detalles</button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -89,7 +89,7 @@ export default function Pagos() {
             <p className="text-[10px] sm:text-xs font-bold text-on-surface-variant uppercase tracking-wider">Aprobados (24H)</p>
             <p className="text-2xl sm:text-3xl font-extrabold text-secondary">{approved}</p>
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-teal-50 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-secondary/10 rounded-lg flex items-center justify-center shrink-0">
             <span className="material-symbols-outlined text-secondary fill">check_circle</span>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default function Pagos() {
             <p className="text-[10px] sm:text-xs font-bold text-on-surface-variant uppercase tracking-wider">Rechazados</p>
             <p className="text-2xl sm:text-3xl font-extrabold text-error">{rejected}</p>
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-error/10 rounded-lg flex items-center justify-center shrink-0">
             <span className="material-symbols-outlined text-error fill">cancel</span>
           </div>
         </div>
