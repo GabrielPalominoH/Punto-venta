@@ -81,7 +81,7 @@ export default function Layout() {
         <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-lg shrink-0">
           <span className="material-symbols-outlined text-on-primary">sailing</span>
         </div>
-        <div className={`flex items-center justify-between flex-1 overflow-hidden transition-all duration-300 ${
+        <div className={`flex-1 overflow-hidden transition-all duration-300 ${
           isCollapsed ? 'max-w-0 opacity-0 invisible' : 'max-w-44 opacity-100 visible'
         }`}>
           <div className="whitespace-nowrap">
@@ -89,6 +89,15 @@ export default function Layout() {
             <p className="text-on-surface-variant text-[10px] uppercase tracking-widest font-semibold">Admin Dashboard</p>
           </div>
         </div>
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-surface-container-high transition-colors shrink-0"
+          title={collapsed ? "Expandir menú" : "Colapsar menú"}
+        >
+          <span className="material-symbols-outlined text-on-surface-variant text-lg">
+            {collapsed ? 'chevron_right' : 'chevron_left'}
+          </span>
+        </button>
       </div>
 
       <nav className="flex-1 space-y-0.5">
@@ -145,16 +154,6 @@ export default function Layout() {
             <p className="text-xs text-on-surface-variant whitespace-nowrap">{user?.role}</p>
           </div>
         </div>
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="hidden lg:flex items-center justify-center w-full gap-2 px-3 py-2 text-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all"
-          title={collapsed ? "Expandir menú" : "Colapsar menú"}
-        >
-          <span className="material-symbols-outlined text-lg">{collapsed ? 'chevron_right' : 'chevron_left'}</span>
-          <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
-            collapsed ? 'max-w-0 opacity-0' : 'max-w-20 opacity-100'
-          }`}>Colapsar</span>
-        </button>
         <button
           onClick={() => { logout(); navigate("/login", { replace: true }); }}
           className="flex items-center gap-2 w-full px-3 py-2 text-sm text-on-surface-variant hover:text-error hover:bg-error/5 rounded-lg transition-all"
