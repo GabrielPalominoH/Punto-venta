@@ -50,7 +50,7 @@ export default function Usuarios() {
       case "Admin":
         return "bg-secondary/10 text-secondary border border-secondary/20";
       case "Operador":
-        return "bg-[#0b1c30]/10 text-[#0b1c30] border border-[#0b1c30]/20";
+        return "bg-primary/10 text-primary border border-primary/20";
       default:
         return "bg-gray-100 text-on-surface-variant border border-gray-200";
     }
@@ -58,7 +58,7 @@ export default function Usuarios() {
 
   const avatarStyle = (initials) => {
     if (initials === "CM" || initials === "EV") return "bg-secondary/20 text-secondary";
-    if (initials === "AL" || initials === "MS") return "bg-[#0b1c30]/20 text-[#0b1c30]";
+    if (initials === "AL" || initials === "MS") return "bg-primary/20 text-primary";
     return "bg-surface-container-high text-on-surface-variant";
   };
 
@@ -179,7 +179,7 @@ export default function Usuarios() {
                                         onClick={(e) => { e.stopPropagation(); changeRole(u.username, r); }}
                                         className="w-full flex items-center gap-2 px-4 py-1.5 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left"
                                       >
-                                        <span className={`w-2 h-2 rounded-full ${r === "Admin" ? "bg-secondary" : r === "Operador" ? "bg-[#0b1c30]" : "bg-gray-500"}`}></span>
+                                        <span className={`w-2 h-2 rounded-full ${r === "Admin" ? "bg-secondary" : r === "Operador" ? "bg-primary" : "bg-gray-500"}`}></span>
                                         {r}
                                       </button>
                                     ))}
