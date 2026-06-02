@@ -77,7 +77,7 @@ export default function Layout() {
         isCollapsed ? 'w-[72px] px-2' : 'w-[260px] px-3'
       }`}
     >
-      <div className="flex items-center gap-3 px-3 mb-8">
+      <div className={`flex items-center mb-8 ${isCollapsed ? 'justify-center gap-0 px-0' : 'gap-3 px-3'}`}>
         <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-lg shrink-0">
           <span className="material-symbols-outlined text-on-primary">sailing</span>
         </div>
