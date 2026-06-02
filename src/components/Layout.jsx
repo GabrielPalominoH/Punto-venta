@@ -73,8 +73,8 @@ export default function Layout() {
   const renderSidebar = (isCollapsed, isMobile = false) => (
     <aside
       ref={isMobile ? sidebarRef : undefined}
-      className={`fixed left-0 top-0 h-screen bg-surface border-r border-outline-variant flex flex-col py-6 overflow-y-auto z-50 transition-[width,padding] duration-300 ${
-        isCollapsed ? 'w-[72px] px-2' : 'w-[260px] px-3'
+      className={`fixed left-0 top-0 h-screen bg-surface border-r border-outline-variant flex flex-col py-6 z-50 transition-[width,padding] duration-300 ${
+        isCollapsed ? 'w-[72px] overflow-x-visible overflow-y-auto' : 'w-[260px] px-3 overflow-y-auto'
       }`}
     >
       <div className={`flex items-center mb-8 ${isCollapsed ? 'justify-center px-0' : 'gap-3 px-3'}`}>
