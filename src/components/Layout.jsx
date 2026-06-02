@@ -77,9 +77,20 @@ export default function Layout() {
         isCollapsed ? 'w-[72px] px-2' : 'w-[260px] px-3'
       }`}
     >
-      <div className={`flex items-center mb-8 ${isCollapsed ? 'justify-center gap-0 px-0' : 'gap-3 px-3'}`}>
-        <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-lg shrink-0">
-          <span className="material-symbols-outlined text-on-primary">sailing</span>
+      <div className={`flex items-center mb-8 ${isCollapsed ? 'justify-center px-0' : 'gap-3 px-3'}`}>
+        <div
+          onClick={() => { if (isCollapsed) setCollapsed(false); }}
+          className={`relative group w-10 h-10 bg-primary flex items-center justify-center rounded-lg shrink-0 ${isCollapsed ? 'cursor-pointer' : ''}`}
+          title={isCollapsed ? "Expandir menú" : undefined}
+        >
+          {isCollapsed ? (
+            <>
+              <span className="material-symbols-outlined text-on-primary transition-all duration-300 group-hover:opacity-0 group-hover:scale-75">sailing</span>
+              <span className="material-symbols-outlined text-on-primary absolute transition-all duration-300 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100">left_panel_open</span>
+            </>
+          ) : (
+            <span className="material-symbols-outlined text-on-primary">sailing</span>
+          )}
         </div>
         <div className={`flex-1 overflow-hidden transition-all duration-300 ${
           isCollapsed ? 'max-w-0 opacity-0 invisible' : 'max-w-44 opacity-100 visible'
@@ -89,26 +100,15 @@ export default function Layout() {
             <p className="text-on-surface-variant text-[10px] uppercase tracking-widest font-semibold">Admin Dashboard</p>
           </div>
         </div>
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-surface-container-high transition-all duration-300 shrink-0 relative group"
-          title={collapsed ? "Expandir menú" : "Colapsar menú"}
-        >
-          {collapsed ? (
-            <>
-              <span className="material-symbols-outlined text-outline text-lg transition-all duration-300 group-hover:opacity-0 group-hover:scale-75">
-                sailing
-              </span>
-              <span className="material-symbols-outlined text-on-surface-variant text-lg absolute transition-all duration-300 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100">
-                left_panel_open
-              </span>
-            </>
-          ) : (
-            <span className="material-symbols-outlined text-on-surface-variant text-lg transition-all duration-300 group-hover:scale-110">
-              left_panel_close
-            </span>
-          )}
-        </button>
+        {!isCollapsed && (
+          <button
+            onClick={() => setCollapsed(true)}
+            className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-surface-container-high transition-all duration-300 shrink-0 group"
+            title="Colapsar menú"
+          >
+            <span className="material-symbols-outlined text-on-surface-variant text-lg transition-all duration-300 group-hover:scale-110">left_panel_close</span>
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 space-y-0.5">
