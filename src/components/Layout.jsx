@@ -86,7 +86,7 @@ export default function Layout() {
           {isCollapsed ? (
             <>
               <span className="material-symbols-outlined text-on-primary transition-all duration-300 group-hover:opacity-0 group-hover:scale-75">sailing</span>
-              <span className="material-symbols-outlined text-on-primary absolute transition-all duration-300 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100">left_panel_open</span>
+              <span className="material-symbols-outlined text-on-primary absolute transition-all duration-300 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100">last_page</span>
             </>
           ) : (
             <span className="material-symbols-outlined text-on-primary">sailing</span>
@@ -106,7 +106,7 @@ export default function Layout() {
             className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-surface-container-high transition-all duration-300 shrink-0 group"
             title="Colapsar menú"
           >
-            <span className="material-symbols-outlined text-on-surface-variant text-lg transition-all duration-300 group-hover:scale-110">left_panel_close</span>
+            <span className="material-symbols-outlined text-on-surface-variant text-lg transition-all duration-300 group-hover:scale-110">first_page</span>
           </button>
         )}
       </div>
