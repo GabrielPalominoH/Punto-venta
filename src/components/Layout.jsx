@@ -35,6 +35,7 @@ export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notifSeen, setNotifSeen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const notifRef = useRef(null);
   const sidebarRef = useRef(null);
 
@@ -69,59 +70,100 @@ export default function Layout() {
     setSearchParams(nextParams, { replace: true });
   };
 
-  const sidebar = (
-    <aside ref={sidebarRef} className="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-6 px-3 overflow-y-auto z-50">
-      <div className="mb-8 px-3 flex items-center gap-3">
-        <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-lg">
-          <span className="material-symbols-outlined text-on-primary fill">sailing</span>
+  const renderSidebar = (isCollapsed, isMobile = false) => (
+    <aside
+      ref={isMobile ? sidebarRef : undefined}
+      className={`fixed left-0 top-0 h-screen bg-surface border-r border-outline-variant flex flex-col py-6 overflow-y-auto z-50 transition-all duration-300 ${
+        isCollapsed ? 'w-[72px] px-2' : 'w-[260px] px-3'
+      }`}
+    >
+      <div className="flex items-center gap-3 px-3 mb-8">
+        <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-lg shrink-0">
+          <span className="material-symbols-outlined text-on-primary">sailing</span>
         </div>
-        <div>
-          <h1 className="text-primary font-bold text-lg tracking-tight leading-tight">Marlin Poseidon</h1>
-          <p className="text-on-surface-variant text-[10px] uppercase tracking-widest font-semibold">Admin Dashboard</p>
+        <div className={`flex items-center justify-between flex-1 overflow-hidden transition-all duration-300 ${
+          isCollapsed ? 'max-w-0 opacity-0 invisible' : 'max-w-44 opacity-100 visible'
+        }`}>
+          <div className="whitespace-nowrap">
+            <h1 className="text-primary font-bold text-lg tracking-tight leading-tight">Marlin Poseidon</h1>
+            <p className="text-on-surface-variant text-[10px] uppercase tracking-widest font-semibold">Admin Dashboard</p>
+          </div>
         </div>
       </div>
+
       <nav className="flex-1 space-y-0.5">
         {navItems.map((item, i) =>
           item.section ? (
-            <p key={item.section} className={`px-3 text-[10px] font-bold text-outline uppercase tracking-widest ${i > 0 ? "mt-5" : "mt-0"}`}>
+            <p
+              key={item.section}
+              className={`px-3 text-[10px] font-bold text-outline uppercase tracking-widest overflow-hidden transition-all duration-300 ${
+                isCollapsed
+                  ? 'max-h-0 opacity-0 mt-0'
+                  : `${i > 0 ? 'mt-5' : 'mt-0'} max-h-8 opacity-100`
+              }`}
+            >
               {item.section}
             </p>
           ) : (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.to === "/"}
-            onClick={() => setSidebarOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-3 py-2.5 px-3 rounded-lg transition-all duration-200 text-sm ${
-                isActive
-                  ? "text-secondary font-bold bg-secondary/10 border-r-4 border-secondary rounded-r-none"
-                  : "text-on-surface-variant hover:bg-surface-container-high"
-              }`
-            }
-          >
-            <span className="material-symbols-outlined">{item.icon}</span>
-            <span>{item.label}</span>
-          </NavLink>
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === "/"}
+              onClick={() => { if (isMobile) setSidebarOpen(false); }}
+              title={isCollapsed ? item.label : undefined}
+              className={({ isActive }) =>
+                `group relative flex items-center gap-3 py-2.5 px-3 rounded-lg transition-all duration-200 text-sm ${
+                  isActive
+                    ? "text-secondary font-bold bg-secondary/10 border-r-4 border-secondary rounded-r-none"
+                    : "text-on-surface-variant hover:bg-surface-container-high"
+                }`
+              }
+            >
+              <span className="material-symbols-outlined shrink-0">{item.icon}</span>
+              <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
+                isCollapsed ? 'max-w-0 opacity-0' : 'max-w-40 opacity-100'
+              }`}>{item.label}</span>
+              {isCollapsed && (
+                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-primary text-on-primary text-xs font-medium rounded-lg whitespace-nowrap shadow-lg z-[60] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none">
+                  {item.label}
+                </div>
+              )}
+            </NavLink>
           )
         )}
       </nav>
-      <div className="mt-auto pt-4 border-t border-outline-variant space-y-2">
-        <div className="flex items-center gap-3 px-3">
-          <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center text-sm font-bold text-on-surface-variant">
+
+      <div className="mt-auto pt-4 border-t border-outline-variant space-y-1 px-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center text-sm font-bold text-on-surface-variant shrink-0">
             {initials}
           </div>
-          <div className="overflow-hidden">
-            <p className="text-sm font-bold truncate">{user?.name}</p>
-            <p className="text-xs text-on-surface-variant">{user?.role}</p>
+          <div className={`overflow-hidden transition-all duration-300 ${
+            isCollapsed ? 'max-w-0 opacity-0 invisible' : 'max-w-36 opacity-100 visible'
+          }`}>
+            <p className="text-sm font-bold truncate whitespace-nowrap">{user?.name}</p>
+            <p className="text-xs text-on-surface-variant whitespace-nowrap">{user?.role}</p>
           </div>
         </div>
         <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="hidden lg:flex items-center justify-center w-full gap-2 px-3 py-2 text-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all"
+          title={collapsed ? "Expandir menú" : "Colapsar menú"}
+        >
+          <span className="material-symbols-outlined text-lg">{collapsed ? 'chevron_right' : 'chevron_left'}</span>
+          <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
+            collapsed ? 'max-w-0 opacity-0' : 'max-w-20 opacity-100'
+          }`}>Colapsar</span>
+        </button>
+        <button
           onClick={() => { logout(); navigate("/login", { replace: true }); }}
           className="flex items-center gap-2 w-full px-3 py-2 text-sm text-on-surface-variant hover:text-error hover:bg-error/5 rounded-lg transition-all"
+          title={isCollapsed ? "Cerrar Sesión" : undefined}
         >
-          <span className="material-symbols-outlined text-lg">logout</span>
-          <span>Cerrar Sesión</span>
+          <span className="material-symbols-outlined text-lg shrink-0">logout</span>
+          <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
+            isCollapsed ? 'max-w-0 opacity-0' : 'max-w-24 opacity-100'
+          }`}>Cerrar Sesión</span>
         </button>
       </div>
     </aside>
@@ -130,20 +172,21 @@ export default function Layout() {
   return (
     <div className="flex min-h-screen bg-surface">
       {/* Desktop sidebar */}
-      <div className="hidden lg:block">{sidebar}</div>
+      <div className="hidden lg:block">{renderSidebar(collapsed)}</div>
 
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
-      <div className={`fixed inset-y-0 left-0 w-[260px] z-50 transition-transform duration-300 lg:hidden ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <button onClick={() => setSidebarOpen(false)} className="absolute top-3 right-3 z-[60] p-1.5 hover:bg-surface-container-high rounded-lg transition-colors">
-          <span className="material-symbols-outlined text-on-surface-variant">close</span>
-        </button>
-        {sidebar}
+      <div className={`fixed inset-y-0 left-0 z-50 transition-transform duration-300 lg:hidden ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      }`}>
+        {renderSidebar(false, true)}
       </div>
 
-      <div className="flex-1 flex flex-col min-h-screen lg:ml-[260px]">
+      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${
+        collapsed ? 'lg:ml-[72px]' : 'lg:ml-[260px]'
+      }`}>
         <header className="sticky top-0 z-30 h-16 bg-surface border-b border-outline-variant shadow-sm flex items-center justify-between px-4 lg:px-6">
           <div className="flex items-center gap-1 sm:gap-3 flex-1 max-w-md">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 hover:bg-surface-container-low rounded-lg transition-colors">
