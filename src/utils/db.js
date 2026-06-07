@@ -7,8 +7,17 @@ const USERS_KEY = "marlin_db_users";
 const ACTIVITIES_KEY = "marlin_db_activities";
 const LOW_STOCK_THRESHOLD_KEY = "marlin_low_stock_threshold";
 const CATEGORIES_KEY = "marlin_db_categories";
+const BRANDING_KEY = "marlin_branding";
 
 const initialCategories = ["Motores", "Electrónica", "Equipamiento", "Anzuelos", "Cañas", "Carretes", "Señuelos", "Hilos"];
+
+const defaultBranding = {
+  logoType: "icon",
+  logoIcon: "storefront",
+  logoColor: "#00687a",
+  logoUrl: "",
+  logoImage: "",
+};
 
 const initialProducts = [
   { id: 1, name: "Penn Battle III 6000", brand: "Penn", category: "Carretes", price: 189.99, stock: 10, minStock: 5, code: "CAR-001", image: "https://picsum.photos/seed/product1/200/200", caracteristicas: "Carrete giratorio de 6000 con 5 rodamientos, ratio 5.2:1, capacidad 200m/30lb", modalidad: "Spinning" },
@@ -138,4 +147,8 @@ export const db = {
   // CATEGORIES
   getCategories: () => getStored(CATEGORIES_KEY, initialCategories),
   saveCategories: (categories) => saveStored(CATEGORIES_KEY, categories),
+
+  // BRANDING
+  getBranding: () => getStored(BRANDING_KEY, defaultBranding),
+  saveBranding: (branding) => saveStored(BRANDING_KEY, branding),
 };

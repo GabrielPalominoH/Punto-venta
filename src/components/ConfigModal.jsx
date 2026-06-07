@@ -5,16 +5,32 @@ const tabs = [
   { id: "general", icon: "person", label: "General" },
   { id: "seguridad", icon: "lock", label: "Seguridad" },
   { id: "apariencia", icon: "palette", label: "Apariencia" },
+  { id: "personalizacion", icon: "brand_awareness", label: "Personalización" },
   { id: "categorias", icon: "category", label: "Categorías" },
   { id: "notificaciones", icon: "notifications", label: "Notificaciones" },
 ];
 
-export default function ConfigModal({ onClose }) {
+const logoIcons = [
+  "storefront", "store", "shopping_cart", "point_of_sale",
+  "inventory_2", "dashboard", "receipt_long", "payments",
+  "group", "settings", "history", "category",
+  "admin_panel_settings", "business", "travel_explore",
+  "directions_boat", "anchor", "waves", "sailing",
+  "kayaking", "compass_calibration",
+];
+
+const presetColors = [
+  "#00687a", "#0d9488", "#2563eb", "#7c3aed", "#db2777",
+  "#dc2626", "#ea580c", "#d97706", "#65a30d", "#000000",
+];
+
+export default function ConfigModal({ onClose, onBrandingChange }) {
   const [activeTab, setActiveTab] = useState("general");
   const [darkMode, setDarkMode] = useState(
-    () => document.documentElement.classList.contains("dark")
+    () => localStorage.getItem("marlin_theme") === "dark" || document.documentElement.classList.contains("dark")
   );
   const [categories, setCategories] = useState(() => db.getCategories());
+  const [branding, setBranding] = useState(() => db.getBranding());
   const [newCategory, setNewCategory] = useState("");
   const [editingCat, setEditingCat] = useState(null);
   const [editCatValue, setEditCatValue] = useState("");
@@ -28,9 +44,16 @@ export default function ConfigModal({ onClose }) {
       root.classList.remove("dark");
     }
     setDarkMode(isDark);
+    localStorage.setItem("marlin_theme", isDark ? "dark" : "light");
     setTimeout(() => {
       root.classList.remove("theme-transitioning");
     }, 300);
+  };
+
+  const saveBranding = (updated) => {
+    setBranding(updated);
+    db.saveBranding(updated);
+    if (onBrandingChange) onBrandingChange(updated);
   };
 
   return (
@@ -143,12 +166,17 @@ export default function ConfigModal({ onClose }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <button
                     onClick={() => toggleTheme(false)}
-                    className={`p-4 sm:p-5 border-2 rounded-xl flex flex-col items-center gap-3 transition-all hover:scale-[1.02] ${
+                    className={`relative p-4 sm:p-5 border-2 rounded-xl flex flex-col items-center gap-3 transition-all hover:scale-[1.02] ${
                       !darkMode
-                        ? "border-secondary bg-surface-bright"
+                        ? "border-secondary bg-secondary/10 ring-2 ring-secondary/30 shadow-md"
                         : "border-outline-variant bg-surface-container-low"
                     }`}
                   >
+                    {!darkMode && (
+                      <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-secondary text-on-secondary flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[14px]">check</span>
+                      </span>
+                    )}
                     <div className="w-full h-16 sm:h-20 bg-slate-50 border border-slate-200 rounded flex flex-col p-2 gap-1 overflow-hidden">
                       <div className="h-2 w-1/2 bg-slate-200 rounded"></div>
                       <div className="h-full w-full bg-white rounded shadow-sm" data-keep-white={true}></div>
@@ -160,12 +188,17 @@ export default function ConfigModal({ onClose }) {
                   </button>
                   <button
                     onClick={() => toggleTheme(true)}
-                    className={`p-4 sm:p-5 border-2 rounded-xl flex flex-col items-center gap-3 transition-all hover:scale-[1.02] ${
+                    className={`relative p-4 sm:p-5 border-2 rounded-xl flex flex-col items-center gap-3 transition-all hover:scale-[1.02] ${
                       darkMode
-                        ? "border-secondary bg-[#1a1a1a]"
+                        ? "border-secondary bg-secondary/20 ring-2 ring-secondary/40 shadow-md"
                         : "border-outline-variant"
                     }`}
                   >
+                    {darkMode && (
+                      <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-secondary text-on-secondary flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[14px]">check</span>
+                      </span>
+                    )}
                     <div className="w-full h-16 sm:h-20 bg-slate-900 border border-slate-800 rounded flex flex-col p-2 gap-1 overflow-hidden">
                       <div className="h-2 w-1/2 bg-slate-700 rounded"></div>
                       <div className="h-full w-full bg-slate-800 rounded shadow-sm"></div>
@@ -175,6 +208,145 @@ export default function ConfigModal({ onClose }) {
                       Tema Oscuro
                     </span>
                   </button>
+                </div>
+              </section>
+            )}
+
+            {activeTab === "personalizacion" && (
+              <section className="space-y-3 sm:space-y-4">
+                <h3 className="text-[10px] sm:text-xs font-bold text-outline uppercase tracking-wider mb-3 sm:mb-4">Logo del Sistema</h3>
+
+                <div className="pt-1">
+                  <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Tipo de Logo</h4>
+                  <div className="flex gap-2 mb-4">
+                    {["icon", "url", "image"].map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => saveBranding({ ...branding, logoType: type })}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
+                          branding.logoType === type
+                            ? "bg-secondary text-on-secondary border-secondary"
+                            : "border-outline-variant text-on-surface-variant hover:bg-surface-container-high"
+                        }`}
+                      >
+                        {type === "icon" ? "Icono" : type === "url" ? "URL" : "Imagen"}
+                      </button>
+                    ))}
+                  </div>
+
+                  {branding.logoType === "icon" && (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div
+                          className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                          style={{ backgroundColor: branding.logoColor }}
+                        >
+                          <span className="material-symbols-outlined text-white text-lg">{branding.logoIcon}</span>
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs font-semibold text-on-surface">Vista previa</p>
+                          <p className="text-[10px] text-outline">Selecciona un icono y color</p>
+                        </div>
+                        <label className="relative w-8 h-8 rounded-full border border-outline-variant overflow-hidden cursor-pointer shrink-0">
+                          <input
+                            type="color"
+                            value={branding.logoColor}
+                            onChange={(e) => saveBranding({ ...branding, logoColor: e.target.value })}
+                            className="absolute inset-0 w-full h-full cursor-pointer border-0 p-0"
+                          />
+                        </label>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {presetColors.map((c) => (
+                          <button
+                            key={c}
+                            onClick={() => saveBranding({ ...branding, logoColor: c })}
+                            className={`w-6 h-6 rounded-full border-2 transition-all ${
+                              branding.logoColor === c ? "border-secondary scale-110" : "border-transparent"
+                            }`}
+                            style={{ backgroundColor: c }}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-[10px] font-semibold text-outline uppercase tracking-wider mt-3 mb-1.5">Iconos</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {logoIcons.map((icon) => (
+                          <button
+                            key={icon}
+                            onClick={() => saveBranding({ ...branding, logoIcon: icon })}
+                            className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all ${
+                              branding.logoIcon === icon
+                                ? "bg-secondary text-on-secondary ring-2 ring-secondary"
+                                : "bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high"
+                            }`}
+                          >
+                            <span className="material-symbols-outlined text-lg">{icon}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {branding.logoType === "url" && (
+                    <div className="space-y-2">
+                      <input
+                        value={branding.logoUrl}
+                        onChange={(e) => saveBranding({ ...branding, logoUrl: e.target.value })}
+                        placeholder="https://ejemplo.com/logo.png"
+                        className="w-full px-3 sm:px-4 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-sm focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all"
+                      />
+                      {branding.logoUrl && (
+                        <div className="w-16 h-16 rounded-lg border border-outline-variant overflow-hidden bg-surface-container-high flex items-center justify-center">
+                          <img
+                            src={branding.logoUrl}
+                            alt="Logo preview"
+                            className="max-w-full max-h-full object-contain"
+                            onError={(e) => { e.target.style.display = "none"; e.target.parentElement.innerHTML = '<span class="material-symbols-outlined text-outline">broken_image</span>'; }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {branding.logoType === "image" && (
+                    <div className="space-y-2">
+                      <label className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 border-dashed border-outline-variant bg-surface-container-low cursor-pointer hover:bg-surface-container-high transition-all text-sm text-on-surface-variant">
+                        <span className="material-symbols-outlined text-lg">upload</span>
+                        {branding.logoImage ? "Cambiar imagen" : "Subir imagen"}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                              saveBranding({ ...branding, logoImage: ev.target?.result });
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+                      {branding.logoImage && (
+                        <div className="w-16 h-16 rounded-lg border border-outline-variant overflow-hidden bg-surface-container-high flex items-center justify-center">
+                          <img
+                            src={branding.logoImage}
+                            alt="Logo preview"
+                            className="max-w-full max-h-full object-contain"
+                          />
+                        </div>
+                      )}
+                      {branding.logoImage && (
+                        <button
+                          onClick={() => saveBranding({ ...branding, logoImage: "" })}
+                          className="text-xs text-error hover:underline"
+                        >
+                          Eliminar imagen
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </section>
             )}
@@ -292,9 +464,9 @@ export default function ConfigModal({ onClose }) {
                         <p className="text-sm font-semibold text-primary">{item.label}</p>
                         <p className="text-xs text-on-surface-variant">{item.desc}</p>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0">
                         <input type="checkbox" defaultChecked className="sr-only peer" />
-                        <div className="w-9 h-5 bg-outline-variant rounded-full peer peer-checked:bg-secondary peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                        <div className="w-11 h-6 bg-outline rounded-full peer peer-checked:bg-secondary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm after:border after:border-outline-variant peer-checked:after:translate-x-5 peer-checked:after:border-secondary peer-checked:after:bg-on-secondary"></div>
                       </label>
                     </div>
                   ))}

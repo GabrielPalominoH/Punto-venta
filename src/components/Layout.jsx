@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { db } from "../utils/db";
 import ConfigModal from "./ConfigModal";
 import "../App.css";
 
@@ -36,6 +37,12 @@ export default function Layout() {
   const [notifSeen, setNotifSeen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [branding, setBranding] = useState(() => db.getBranding());
+
+  const handleBrandingChange = (updated) => {
+    setBranding(updated);
+  };
+
   const notifRef = useRef(null);
   const sidebarRef = useRef(null);
 
@@ -80,23 +87,25 @@ export default function Layout() {
       <div className={`flex items-center mb-8 ${isCollapsed ? 'justify-center px-0' : 'gap-3 px-3'}`}>
         <div
           onClick={() => setCollapsed(prev => isCollapsed ? false : !prev)}
-          className={`relative group w-10 h-10 bg-primary flex items-center justify-center rounded-lg shrink-0 cursor-pointer ${isCollapsed ? '' : ''}`}
+          className={`relative group w-10 h-10 flex items-center justify-center rounded-lg shrink-0 overflow-hidden cursor-pointer`}
+          style={{ backgroundColor: branding.logoType === "icon" ? branding.logoColor : "transparent" }}
           title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
         >
-          {isCollapsed ? (
-            <>
-              <span className="material-symbols-outlined text-on-primary transition-all duration-300 group-hover:opacity-0 group-hover:scale-75">sailing</span>
-              <span className="material-symbols-outlined text-on-primary absolute transition-all duration-300 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100">last_page</span>
-            </>
+          {branding.logoType === "icon" ? (
+            <span className="material-symbols-outlined text-white text-lg">{branding.logoIcon}</span>
           ) : (
-            <span className="material-symbols-outlined text-on-primary">sailing</span>
+            <img
+              src={branding.logoType === "url" ? branding.logoUrl : branding.logoImage}
+              alt="Logo"
+              className="w-full h-full object-contain p-1"
+            />
           )}
         </div>
         <div className={`flex-1 overflow-hidden transition-all duration-300 ${
           isCollapsed ? 'max-w-0 opacity-0 invisible' : 'max-w-44 opacity-100 visible'
         }`}>
           <div className="whitespace-nowrap">
-            <h1 className="text-primary font-bold text-lg tracking-tight leading-tight">Marlin Poseidon</h1>
+            <h1 className="text-primary font-bold text-lg tracking-tight leading-tight">Punto Venta</h1>
             <p className="text-on-surface-variant text-[10px] uppercase tracking-widest font-semibold">Admin Dashboard</p>
           </div>
         </div>
@@ -254,7 +263,7 @@ export default function Layout() {
             </button>
           </div>
         </header>
-        {showConfig && <ConfigModal onClose={() => setShowConfig(false)} />}
+        {showConfig && <ConfigModal onClose={() => setShowConfig(false)} onBrandingChange={handleBrandingChange} />}
         <main className="flex-1 p-4 lg:p-6">
           <Outlet />
         </main>
