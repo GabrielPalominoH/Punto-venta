@@ -21,6 +21,17 @@
 - Surface tokens: `surface`, `surface-dim`, `surface-bright`, `surface-container`, `surface-container-low`, `surface-container-high`, `surface-container-highest`, `surface-container-lowest`
 - System colors: `primary`, `secondary`, `error`, `outline`, `outline-variant`, `on-*` variants
 - Dark mode via `.dark` class (special overrides for `.dark .bg-white:not([data-keep-white])`)
+- In dark mode, `secondary` and `primary` become `#ffffff` — toggles must use `peer-checked:after:bg-on-secondary` for thumb contrast
+
+## ConfigModal (`src/components/ConfigModal.jsx`)
+- 6 tabs: General, Seguridad, Apariencia, Personalización, Categorías, Notificaciones
+- **Personalización**: Logo branding with 3 types (icon/URL/image), color picker + 10 presets, 22 logo icons
+- Branding persisted in localStorage via `db.getBranding()` / `db.saveBranding()`
+- **Notificaciones**: 4 preference toggles using pure-CSS toggle (`sr-only peer` input + `after:` pseudo-element thumb)
+- Toggle dimensions: `w-11 h-6`, thumb `h-5 w-5`, translation `translate-x-5`
+- Toggle colors unchecked: `bg-outline` + thumb `bg-white` with `border-outline-variant`
+- Toggle colors checked: `bg-secondary` + thumb `peer-checked:after:bg-on-secondary` with `peer-checked:after:border-secondary`
+- Toggle thumb uses `after:bg-white` for unchecked, overridden to `after:bg-on-secondary` when checked (critical for dark mode where `secondary` = white)
 
 ## POS Layout (`/punto-venta`)
 - **Mobile** (`< lg`, breakpoint = 64rem/1024px): sticky cart bar + slide-up cart sheet

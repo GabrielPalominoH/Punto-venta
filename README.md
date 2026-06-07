@@ -51,12 +51,18 @@ Sistema de gestión de punto de venta, inventario y administración para **Marli
 - Lista de usuarios del sistema con roles (Admin, Operador, Inventario)
 - Timeline de actividad del sistema
 
+### Auditoría
+- Registro de actividades paginado (10 por página)
+- Filtros: búsqueda de texto, rango de fechas, responsable
+- Navegación entre páginas con números y elipsis
+
 ### Ajustes del Sistema
 - **General**: Foto de perfil
 - **Seguridad**: Cambio de contraseña
 - **Apariencia**: Tema claro/oscuro con animación suave
+- **Personalización**: Logo del sistema (icono, URL o imagen), color y vista previa
 - **Inventario**: Umbral de stock bajo configurable
-- **Notificaciones**: Preferencias de alertas
+- **Notificaciones**: Preferencias de alertas con toggles
 
 ### Autenticación
 - Login simulado con usuarios de prueba
@@ -91,7 +97,8 @@ npm run dev
 ```
 src/
 ├── components/
-│   ├── ConfigModal.jsx   — Modal de configuración del sistema
+│   ├── Combobox.jsx      — Dropdown personalizado con búsqueda y teclado
+│   ├── ConfigModal.jsx   — Modal de configuración del sistema (6 pestañas)
 │   └── Layout.jsx        — Layout principal con sidebar y header
 ├── context/
 │   └── AuthContext.jsx    — Contexto de autenticación
@@ -102,10 +109,12 @@ src/
 │   ├── PuntoVenta.jsx     — Punto de venta (POS)
 │   ├── Usuarios.jsx       — Gestión de usuarios
 │   ├── HistorialVentas.jsx— Historial de transacciones
+│   ├── Auditoria.jsx      — Registro de actividades del sistema
 │   └── Login.jsx          — Pantalla de inicio de sesión
 ├── utils/
 │   └── db.js              — Capa de persistencia en localStorage
-├── index.css              — Estilos globales y overrides de modo oscuro
+├── index.css              — Estilos globales, temas y overrides de modo oscuro
+├── App.css                — Helpers de layout para paneles de filtros
 ├── App.jsx                — Configuración de rutas
 └── main.jsx               — Punto de entrada
 ```
